@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -453,7 +452,6 @@ HTML
 </div>
 
 <script>
-    // Hero Banner Slideshow Logic
     let currentHeroSlide = 0;
     const heroSlides = document.querySelectorAll('.hero-slide');
     const heroDots = document.querySelectorAll('.hero-dot');
@@ -463,9 +461,7 @@ HTML
         if (!heroSlides.length) return;
         heroSlides[currentHeroSlide].classList.remove('active');
         heroDots[currentHeroSlide].classList.remove('active');
-        
         currentHeroSlide = index;
-        
         heroSlides[currentHeroSlide].classList.add('active');
         heroDots[currentHeroSlide].classList.add('active');
     }
@@ -478,12 +474,10 @@ HTML
 
     setInterval(nextHeroSlide, 5000);
 
-    // Đồng bộ số dư quỹ từ Google Sheet
     function fetchSheetBalance() {
         const sheetID = "1PNwn5r0Jc8ENXYYlrmjkHBIXWNrH3L_aFpjF_Fm-810";
         const gid = "202177448";
         const range = "M7";
-
         const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=${range}`;
 
         fetch(url)
@@ -494,7 +488,6 @@ HTML
                     const cell = json.table.rows[0].c[0];
                     if (cell) {
                         let formattedVal = cell.f || cell.v;
-
                         if (formattedVal !== undefined && formattedVal !== null) {
                             if (typeof formattedVal === 'number') {
                                 formattedVal = formattedVal.toLocaleString('vi-VN') + 'đ';
@@ -520,7 +513,6 @@ HTML
     fetchSheetBalance();
     setInterval(fetchSheetBalance, 30000);
 
-    // Firebase Configurations
     const firebaseConfig = {
         apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
         authDomain: "pickleball-hoanggia.firebaseapp.com",
@@ -724,10 +716,8 @@ HTML
     function calculateElo(winnerRating, loserRating, k = 32) {
         const expectedWinner = 1 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
         const expectedLoser = 1 / (1 + Math.pow(10, (winnerRating - loserRating) / 400));
-        
         const winnerGain = Math.round(k * (1 - expectedWinner));
         const loserLoss = Math.round(k * (0 - expectedLoser));
-        
         return { winnerGain, loserLoss };
     }
 
@@ -813,7 +803,6 @@ HTML
         }
     }
 
-    // Load các dropdown đánh đơn & đánh đôi
     function loadDropdowns(type) {
         if (type === 'singles') {
             const winnerSelect = document.getElementById('singlesMatchWinner');
@@ -843,7 +832,7 @@ HTML
             }
 
             const doublesList = db['doubles'] || [];
-            let optionsDoubles = '<option value="">-- Chọn --</option>';
+            let optionsDoubles = '<option value="">-- Chọn cặp đôi --</option>';
             doublesList.forEach(item => {
                 optionsDoubles += `<option value="${item.name}">${item.name} (${item.points} pts)</option>`;
             });
@@ -857,7 +846,6 @@ HTML
         }
     }
 
-    // Hàm tạo cặp đôi mới từ việc chọn 2 VĐV lẻ
     function addNewPairFromSelection() {
         const p1 = document.getElementById('doublesNewPlayer1').value;
         const p2 = document.getElementById('doublesNewPlayer2').value;
@@ -966,7 +954,6 @@ HTML
     function addNewEntry(type) {
         const nameInput = document.getElementById(type + 'AddName');
         const pointsInput = document.getElementById(type + 'AddPoints');
-
         const name = nameInput.value.trim();
         const points = parseInt(pointsInput.value) || 1200;
 
