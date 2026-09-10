@@ -838,7 +838,6 @@
             winnerSelect.innerHTML = options;
             loserSelect.innerHTML = options;
         } else if (type === 'doubles') {
-            // Lấy danh sách VĐV đơn lẻ (lấy từ bảng Singles để làm nguồn chọn ghép đôi) hoặc có thể lấy từ danh sách tự do. Ở đây ta dùng danh sách Singles để chọn thành viên A, B tạo cặp.
             const singlesList = db['singles'] || [];
             let optionsSingle = '<option value="">-- Chọn VĐV --</option>';
             singlesList.forEach(item => {
@@ -852,7 +851,6 @@
                 np2.innerHTML = optionsSingle;
             }
 
-            // Load danh sách cho 4 ô chọn đội đánh đôi
             const doublesList = db['doubles'] || [];
             let optionsDoubles = '<option value="">-- Chọn --</option>';
             doublesList.forEach(item => {
@@ -970,7 +968,7 @@
     }
 
     function addUpcomingMatch() {
-        const type = document.getElementById('upcomingType').value;
+        const type = document.getElementById('upcomingType.value') || document.getElementById('upcomingType').value;
         const team1 = document.getElementById('upcomingTeam1').value;
         const team2 = document.getElementById('upcomingTeam2').value;
         const handicap = document.getElementById('upcomingHandicap').value;
