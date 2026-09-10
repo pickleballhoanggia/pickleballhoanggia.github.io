@@ -679,19 +679,34 @@
         }
     }
 
+    // XÁC NHẬN KẾT THÚC TRẬN ĐẤU (Cho phép chọn 1 hoặc 2)
     function finishUpcomingMatch(idx) {
         const match = db.upcomingMatches[idx];
         if (!match) return;
         const type = match.type || (match.team1.includes('&') ? 'doubles' : 'singles');
         
-        const winnerName = prompt(`Nhập tên VĐV/Cặp thắng (${match.team1} hoặc ${match.team2}):`, match.team1);
-        if (!winnerName) return;
-        
+        const input = prompt(
+            `Xác nhận bên thắng:\n` +
+            `1. ${match.team1}\n` +
+            `2. ${match.team2}\n\n` +
+            `Nhập 1 hoặc 2 (hoặc gõ chính xác tên bên thắng):`, 
+            "1"
+        );
+
+        if (!input) return;
+
+        const choice = input.trim();
+        let winnerName = '';
         let loserName = '';
-        if (winnerName === match.team1) loserName = match.team2;
-        else if (winnerName === match.team2) loserName = match.team1;
-        else {
-            alert("Tên không khớp với 2 đội thi đấu!");
+
+        if (choice === "1" || choice.toLowerCase() === match.team1.toLowerCase()) {
+            winnerName = match.team1;
+            loserName = match.team2;
+        } else if (choice === "2" || choice.toLowerCase() === match.team2.toLowerCase()) {
+            winnerName = match.team2;
+            loserName = match.team1;
+        } else {
+            alert("Lựa chọn không hợp lệ! Vui lòng chỉ nhập 1, 2 hoặc đúng tên VĐV/Cặp đôi.");
             return;
         }
 
@@ -708,12 +723,12 @@
         const expectedLoser = 1 / (1 + Math.pow(10, (winnerRating - loserRating) / 400));
         
         const winnerGain = Math.round(k * (1 - expectedWinner));
-        const loserLoss = Math.round(k * (0 - expectedLoser)); // Trả về số âm (vd -16)
+        const loserLoss = Math.round(k * (0 - expectedLoser));
         
         return { winnerGain, loserLoss };
     }
 
-    // CẬP NHẬT TRẬN ĐẤU & ĐỊNH DẠNG HIỂN THỊ ELO (+X/-Y Elo)
+    // CẬP NHẬT TRẬN ĐẤU & HIỂN THỊ ELO DẠNG (+X/-Y Elo)
     function processEloMatch(type, winnerName, loserName, note) {
         const list = db[type] || [];
         const winnerObj = list.find(item => item.name === winnerName);
@@ -726,7 +741,7 @@
 
         const elo = calculateElo(winnerObj.points, loserObj.points);
         winnerObj.points += elo.winnerGain;
-        loserObj.points += elo.loserLoss;
+        winnerObj.points += elo.loserLoss; // loserLoss đã mang dấu âm
 
         winnerObj.win = (winnerObj.win || 0) + 1;
         loserObj.loss = (loserObj.loss || 0) + 1;
@@ -734,7 +749,6 @@
         const historyKey = type + 'History';
         if (!db[historyKey]) db[historyKey] = [];
         
-        // Tạo chuỗi dạng (+16/-16 Elo)
         const eloText = `(+${elo.winnerGain}/${elo.loserLoss} Elo)`;
         const fullNote = note ? `${note} ${eloText}` : eloText;
 
