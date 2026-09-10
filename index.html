@@ -197,7 +197,6 @@
         .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
         
-        /* CẬP NHẬT HEADER TRẬN ĐẤU - CHỐNG ĐÈ CHỮ */
         .match-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; width: 100%; }
         .match-time { color: var(--accent); font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; flex: 1; word-break: break-word; }
         .match-badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; flex-shrink: 0; }
@@ -258,7 +257,7 @@
         
         .history-list { max-height: 300px; overflow-y: auto; padding-right: 5px; }
         .history-item { 
-            font-size: 0.85rem; background: #0f172a; padding: 0.5rem 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; 
+            font-size: 0.88rem; background: #0f172a; padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; 
             border-left: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center;
         }
         .history-content { flex: 1; padding-right: 10px; }
@@ -408,7 +407,7 @@
                     <div>
                         <div class="form-group"><label>VĐV Thắng</label><select id="singlesMatchWinner"></select></div>
                         <div class="form-group"><label>VĐV Thua</label><select id="singlesMatchLoser"></select></div>
-                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="singlesMatchNote" placeholder="Ví dụ: Tỉ số 11-9, 11-7..."></div>
+                        <div class="form-group"><label>Ghi chú / Tỉ số</label><input type="text" id="singlesMatchNote" placeholder="Ví dụ: 2-0"></div>
                         <button class="btn" style="background:#2563eb;" onclick="recordMatch('singles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
                     </div>
                 </div>
@@ -432,7 +431,7 @@
                     <div>
                         <div class="form-group"><label>Đôi Thắng</label><select id="doublesMatchWinner"></select></div>
                         <div class="form-group"><label>Đôi Thua</label><select id="doublesMatchLoser"></select></div>
-                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="doublesMatchNote" placeholder="Ví dụ: Tỉ số 11-8, 8-11, 11-5..."></div>
+                        <div class="form-group"><label>Ghi chú / Tỉ số</label><input type="text" id="doublesMatchNote" placeholder="Ví dụ: 2-1"></div>
                         <button class="btn" style="background:#2563eb;" onclick="recordMatch('doubles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
                     </div>
                 </div>
@@ -474,13 +473,11 @@
 
     setInterval(nextHeroSlide, 5000);
 
-    // =========================================================
-    // HÀM ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET (Ô M7)
-    // =========================================================
+    // Đồng bộ số dư quỹ từ Google Sheet
     function fetchSheetBalance() {
         const sheetID = "1PNwn5r0Jc8ENXYYlrmjkHBIXWNrH3L_aFpjF_Fm-810";
         const gid = "202177448";
-        const range = "M7"; // Ô hiển thị tổng số dư quỹ
+        const range = "M7";
 
         const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=${range}`;
 
@@ -539,23 +536,20 @@
 
     const defaultData = {
         singles: [
-            { name: "Minh Tuấn", points: 1300, win: 12, loss: 3 },
-            { name: "Hoàng Nam", points: 1240, win: 8, loss: 4 },
-            { name: "Quốc Anh", points: 1180, win: 5, loss: 6 }
+            { name: "Alex", points: 1216, win: 1, loss: 0 },
+            { name: "Victor", points: 1184, win: 0, loss: 1 }
         ],
         singlesHistory: [
-            { winner: "Minh Tuấn", loser: "Hoàng Nam", note: "Chung kết Đơn Nam (Tỉ số: 11-8, 11-9) (+16 pts)" }
+            { winner: "Alex", loser: "Victor", note: "2-0 (+16/-16 Elo)" }
         ],
         doubles: [
             { name: "Tuấn & Nam", points: 1280, win: 7, loss: 2 },
             { name: "Đức & Anh", points: 1210, win: 4, loss: 4 }
         ],
         doublesHistory: [
-            { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
+            { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "2-1 (+15/-15 Elo)" }
         ],
-        upcomingMatches: [
-            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-03T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
-        ]
+        upcomingMatches: []
     };
 
     let db = defaultData;
@@ -701,23 +695,25 @@
             return;
         }
 
-        const note = prompt("Ghi chú / Tỉ số trận đấu:", "Tỉ số 11-9, 11-8");
+        const note = prompt("Ghi chú / Tỉ số trận đấu (Ví dụ: 2-0):", "2-0");
         if (processEloMatch(type, winnerName, loserName, note)) {
             db.upcomingMatches.splice(idx, 1);
             saveData();
         }
     }
 
+    // TÍNH TOÁN ĐIỂM ELO
     function calculateElo(winnerRating, loserRating, k = 32) {
         const expectedWinner = 1 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
         const expectedLoser = 1 / (1 + Math.pow(10, (winnerRating - loserRating) / 400));
         
         const winnerGain = Math.round(k * (1 - expectedWinner));
-        const loserLoss = Math.round(k * (0 - expectedLoser));
+        const loserLoss = Math.round(k * (0 - expectedLoser)); // Trả về số âm (vd -16)
         
         return { winnerGain, loserLoss };
     }
 
+    // CẬP NHẬT TRẬN ĐẤU & ĐỊNH DẠNG HIỂN THỊ ELO (+X/-Y Elo)
     function processEloMatch(type, winnerName, loserName, note) {
         const list = db[type] || [];
         const winnerObj = list.find(item => item.name === winnerName);
@@ -738,7 +734,10 @@
         const historyKey = type + 'History';
         if (!db[historyKey]) db[historyKey] = [];
         
-        const fullNote = `${note || 'Trận đấu Elo'} (+${elo.winnerGain} / ${elo.loserLoss} pts)`;
+        // Tạo chuỗi dạng (+16/-16 Elo)
+        const eloText = `(+${elo.winnerGain}/${elo.loserLoss} Elo)`;
+        const fullNote = note ? `${note} ${eloText}` : eloText;
+
         db[historyKey].unshift({
             winner: winnerName,
             loser: loserName,
@@ -782,7 +781,7 @@
                 item.innerHTML = `
                     <div class="history-content">
                         <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
-                        <div style="color: var(--text-muted); font-size:0.75rem;">${h.note || ''}</div>
+                        <div style="color: var(--text-muted); font-size:0.8rem; margin-top: 3px;">${h.note || ''}</div>
                     </div>
                     ${isAdminActive ? `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${type}', ${hIdx})" title="Xóa lịch sử"><i class="fa-solid fa-trash"></i></button>` : ''}
                 `;
