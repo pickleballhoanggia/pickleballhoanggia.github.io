@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -109,9 +108,7 @@ HTML
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        .hero-title span {
-            color: var(--primary-hover);
-        }
+        .hero-title span { color: var(--primary-hover); }
 
         .hero-desc {
             color: var(--text-muted);
@@ -120,11 +117,7 @@ HTML
             line-height: 1.5;
         }
 
-        .hero-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .btn-hero {
             padding: 10px 20px;
@@ -140,15 +133,8 @@ HTML
             border: none;
         }
 
-        .btn-hero-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-hero-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
+        .btn-hero-primary { background: var(--primary); color: white; }
+        .btn-hero-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
         .btn-hero-secondary {
             background: rgba(255, 255, 255, 0.1);
@@ -156,11 +142,7 @@ HTML
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .btn-hero-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
+        .btn-hero-secondary:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
 
         .hero-dots {
             position: absolute;
@@ -172,6 +154,7 @@ HTML
         }
 
         .hero-dot {
+            width: 100px;
             width: 10px;
             height: 10px;
             border-radius: 50%;
@@ -180,11 +163,7 @@ HTML
             transition: 0.3s;
         }
 
-        .hero-dot.active {
-            background: var(--primary-hover);
-            width: 28px;
-            border-radius: 10px;
-        }
+        .hero-dot.active { background: var(--primary-hover); width: 28px; border-radius: 10px; }
 
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -493,21 +472,31 @@ HTML
 
     setInterval(nextHeroSlide, 5000);
 
-    // Hàm đồng bộ dữ liệu từ ô F1 trong Google Sheets
+    // =========================================================
+    // HÀM ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET MỚI CỦA BẠN
+    // =========================================================
     function fetchSheetBalance() {
-        const sheetID = "1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S";
-        const gid = "1114506581";
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=F1`;
+        const sheetID = "1PNwn5r0Jc8ENXYYlrmjkHBIXWNrH3L_aFpjF_Fm-810";
+        const gid = "202177448";
+        const range = "F1"; // Ô hiển thị tổng số dư quỹ
+
+        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=${range}`;
 
         fetch(url)
             .then(res => res.text())
             .then(data => {
                 const json = JSON.parse(data.substring(47, data.length - 2));
-                let val = json.table.rows[0].c[0].v;
-                if (typeof val === 'number') {
-                    val = val.toLocaleString('vi-VN');
+                if (json.table && json.table.rows && json.table.rows.length > 0) {
+                    let val = json.table.rows[0].c[0]?.v;
+                    if (val !== undefined && val !== null) {
+                        if (typeof val === 'number') {
+                            val = val.toLocaleString('vi-VN');
+                        }
+                        document.getElementById('fundBalance').innerText = val + 'đ';
+                        return;
+                    }
                 }
-                document.getElementById('fundBalance').innerText = val + 'đ';
+                document.getElementById('fundBalance').innerText = "0đ";
             })
             .catch(err => {
                 console.error("Lỗi khi tải dữ liệu từ Google Sheets:", err);
@@ -518,6 +507,7 @@ HTML
     fetchSheetBalance();
     setInterval(fetchSheetBalance, 30000);
 
+    // Firebase Configurations
     const firebaseConfig = {
         apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
         authDomain: "pickleball-hoanggia.firebaseapp.com",
@@ -649,277 +639,295 @@ HTML
                     <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})">
                         <i class="fa-solid fa-flag-checkered"></i> Kết thúc & Lưu Elo
                     </button>
-                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này">
-                        <i class="fa-solid fa-trash-can"></i>
+                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận đấu">
+                        <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
             ` : '';
 
-            const handicapHtml = m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : '';
-
-            grid.innerHTML += `
-                <div class="match-card">
-                    ${badgeHtml}
-                    <div class="match-time"><i class="fa-regular fa-clock"></i> ${formattedTime}</div>
-                    <div class="match-versus">
-                        <div class="team-box" style="color:var(--primary-hover);">${m.team1}</div>
-                        <div class="vs-tag">VS</div>
-                        <div class="team-box" style="color:var(--accent);">${m.team2}</div>
-                    </div>
-                    ${handicapHtml}
-                    <div class="match-info">
-                        <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Chưa xếp sân'}</span>
-                        <span><i class="fa-solid fa-trophy"></i> ${m.category || 'Tự do'}</span>
-                    </div>
-                    ${adminControlsHtml}
+            const card = document.createElement('div');
+            card.className = 'match-card';
+            card.innerHTML = `
+                ${badgeHtml}
+                <div class="match-time"><i class="fa-regular fa-calendar"></i> ${formattedTime} ${m.court ? ' | ' + m.court : ''}</div>
+                <div class="match-versus">
+                    <div class="team-box">${m.team1}</div>
+                    <div class="vs-tag">VS</div>
+                    <div class="team-box">${m.team2}</div>
                 </div>
+                ${m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : ''}
+                <div class="match-info">
+                    <span><i class="fa-solid fa-layer-group"></i> ${m.category || (m.type === 'doubles' ? 'Đánh Đôi' : 'Đánh Đơn')}</span>
+                </div>
+                ${adminControlsHtml}
             `;
+            grid.appendChild(card);
         });
     }
 
-    setInterval(() => {
-        renderUpcomingMatches();
-    }, 10000);
+    function deleteUpcomingMatch(idx) {
+        if (confirm("Bạn có chắc chắn muốn xóa trận đấu này?")) {
+            db.upcomingMatches.splice(idx, 1);
+            saveData();
+        }
+    }
 
-    function finishUpcomingMatch(index) {
-        if (!isAdminActive) return;
-        const match = db.upcomingMatches[index];
+    function finishUpcomingMatch(idx) {
+        const match = db.upcomingMatches[idx];
         if (!match) return;
-
-        const mode = (match.category && match.category.includes('Đánh Đơn')) ? 'singles' : 'doubles';
-        const choice = prompt(`KẾT THÚC TRẬN ĐẤU:\nNhập "1" nếu [${match.team1}] THẮNG\nNhập "2" nếu [${match.team2}] THẮNG`, "1");
-
-        if (choice !== "1" && choice !== "2") {
-            return alert("Thao tác hủy hoặc lựa chọn không hợp lệ!");
+        const type = match.type || (match.team1.includes('&') ? 'doubles' : 'singles');
+        
+        const winnerName = prompt(`Nhập tên VĐV/Cặp thắng (${match.team1} hoặc ${match.team2}):`, match.team1);
+        if (!winnerName) return;
+        
+        let loserName = '';
+        if (winnerName === match.team1) loserName = match.team2;
+        else if (winnerName === match.team2) loserName = match.team1;
+        else {
+            alert("Tên không khớp với 2 đội thi đấu!");
+            return;
         }
 
-        const winnerName = choice === "1" ? match.team1 : match.team2;
-        const loserName = choice === "1" ? match.team2 : match.team1;
-
-        const rawNote = prompt("Nhập tỷ số hoặc ghi chú trận đấu (Ví dụ: Tỉ số 11-9, 11-8):", "");
-
-        let winnerObj = db[mode].find(i => i.name === winnerName);
-        let loserObj = db[mode].find(i => i.name === loserName);
-
-        if (!winnerObj) {
-            winnerObj = { name: winnerName, points: 1200, win: 0, loss: 0 };
-            db[mode].push(winnerObj);
+        const note = prompt("Ghi chú / Tỉ số trận đấu:", "Tỉ số 11-9, 11-8");
+        if (processEloMatch(type, winnerName, loserName, note)) {
+            db.upcomingMatches.splice(idx, 1);
+            saveData();
         }
-        if (!loserObj) {
-            loserObj = { name: loserName, points: 1200, win: 0, loss: 0 };
-            db[mode].push(loserObj);
+    }
+
+    function calculateElo(winnerRating, loserRating, k = 32) {
+        const expectedWinner = 1 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
+        const expectedLoser = 1 / (1 + Math.pow(10, (winnerRating - loserRating) / 400));
+        
+        const winnerGain = Math.round(k * (1 - expectedWinner));
+        const loserLoss = Math.round(k * (0 - expectedLoser));
+        
+        return { winnerGain, loserLoss };
+    }
+
+    function processEloMatch(type, winnerName, loserName, note) {
+        const list = db[type] || [];
+        const winnerObj = list.find(item => item.name === winnerName);
+        const loserObj = list.find(item => item.name === loserName);
+
+        if (!winnerObj || !loserObj) {
+            alert("Không tìm thấy thông tin VĐV/Cặp đôi trong hệ thống!");
+            return false;
         }
 
-        const K = 32;
-        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
-        const pointChange = Math.round(K * (1 - expectedWinner));
-
-        winnerObj.points += pointChange;
-        loserObj.points = Math.max(0, loserObj.points - pointChange);
+        const elo = calculateElo(winnerObj.points, loserObj.points);
+        winnerObj.points += elo.winnerGain;
+        loserObj.points += elo.loserLoss;
 
         winnerObj.win = (winnerObj.win || 0) + 1;
         loserObj.loss = (loserObj.loss || 0) + 1;
 
-        const noteText = rawNote ? `${rawNote} (+${pointChange} pts)` : `(+${pointChange} pts)`;
-
-        if (!db[mode + 'History']) db[mode + 'History'] = [];
-        db[mode + 'History'].push({
+        const historyKey = type + 'History';
+        if (!db[historyKey]) db[historyKey] = [];
+        
+        const fullNote = `${note || 'Trận đấu Elo'} (+${elo.winnerGain} / ${elo.loserLoss} pts)`;
+        db[historyKey].unshift({
             winner: winnerName,
             loser: loserName,
-            note: noteText
+            note: fullNote
         });
 
-        db.upcomingMatches.splice(index, 1);
-        saveData();
-        alert(`Đã hoàn tất kết thúc trận đấu!\n${winnerName} (+${pointChange} Elo)`);
+        return true;
+    }
+
+    function renderRankings(type, tableBodyId, historyListId) {
+        const tbody = document.getElementById(tableBodyId);
+        const historyList = document.getElementById(historyListId);
+        if (!tbody) return;
+
+        const players = [...(db[type] || [])].sort((a, b) => b.points - a.points);
+        tbody.innerHTML = '';
+
+        players.forEach((p, idx) => {
+            const rank = idx + 1;
+            let rankClass = '';
+            if (rank === 1) rankClass = 'top-1';
+            else if (rank === 2) rankClass = 'top-2';
+            else if (rank === 3) rankClass = 'top-3';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="rank-badge ${rankClass}">${rank}</span></td>
+                <td><strong>${p.name}</strong></td>
+                <td><span style="color:var(--primary-hover);">${p.win || 0}T</span> - <span style="color:var(--danger);">${p.loss || 0}B</span></td>
+                <td style="text-align: right; font-weight: bold; color: var(--gold);">${p.points}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        if (historyList) {
+            const history = db[type + 'History'] || [];
+            historyList.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); padding:0.5rem; text-align:center;">Chưa có lịch sử đấu</div>' : '';
+            history.forEach((h, hIdx) => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <div class="history-content">
+                        <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
+                        <div style="color: var(--text-muted); font-size:0.75rem;">${h.note || ''}</div>
+                    </div>
+                    ${isAdminActive ? `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${type}', ${hIdx})" title="Xóa lịch sử"><i class="fa-solid fa-trash"></i></button>` : ''}
+                `;
+                historyList.appendChild(item);
+            });
+        }
+    }
+
+    function deleteHistory(type, idx) {
+        if (confirm("Xóa lịch sử trận đấu này? (Điểm Elo hiện tại sẽ giữ nguyên)")) {
+            db[type + 'History'].splice(idx, 1);
+            saveData();
+        }
+    }
+
+    function loadDropdowns(type) {
+        const winnerSelect = document.getElementById(type + 'MatchWinner');
+        const loserSelect = document.getElementById(type + 'MatchLoser');
+        if (!winnerSelect || !loserSelect) return;
+
+        const list = db[type] || [];
+        let options = '<option value="">-- Chọn --</option>';
+        list.forEach(item => {
+            options += `<option value="${item.name}">${item.name} (${item.points} pts)</option>`;
+        });
+
+        winnerSelect.innerHTML = options;
+        loserSelect.innerHTML = options;
+    }
+
+    function loadManageDropdown(type) {
+        const select = document.getElementById(type + 'ManageTarget');
+        if (!select) return;
+
+        const list = db[type] || [];
+        let options = '<option value="">-- Chọn VĐV/Cặp Đôi --</option>';
+        list.forEach(item => {
+            options += `<option value="${item.name}">${item.name} (${item.points} pts)</option>`;
+        });
+
+        select.innerHTML = options;
     }
 
     function updateUpcomingDropdowns() {
         const type = document.getElementById('upcomingType').value;
-        const items = db[type] || [];
         const select1 = document.getElementById('upcomingTeam1');
         const select2 = document.getElementById('upcomingTeam2');
+        if (!select1 || !select2) return;
 
-        if (items.length === 0) {
-            select1.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
-            select2.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
-            return;
-        }
+        const list = db[type] || [];
+        let options = '<option value="">-- Chọn --</option>';
+        list.forEach(item => {
+            options += `<option value="${item.name}">${item.name}</option>`;
+        });
 
-        const optionsHtml = items.map(i => `<option value="${i.name}">${i.name} (${i.points} Elo)</option>`).join('');
-        select1.innerHTML = optionsHtml;
-        select2.innerHTML = optionsHtml;
-
-        if (items.length > 1) {
-            select2.selectedIndex = 1;
-        }
+        select1.innerHTML = options;
+        select2.innerHTML = options;
     }
 
     function addUpcomingMatch() {
-        if (!isAdminActive) return;
-        const matchType = document.getElementById('upcomingType').value;
+        const type = document.getElementById('upcomingType').value;
         const team1 = document.getElementById('upcomingTeam1').value;
         const team2 = document.getElementById('upcomingTeam2').value;
+        const handicap = document.getElementById('upcomingHandicap').value;
         const time = document.getElementById('upcomingTime').value;
-        const court = document.getElementById('upcomingCourt').value.trim();
-        const categoryInput = document.getElementById('upcomingCategory').value.trim();
-        const handicap = document.getElementById('upcomingHandicap').value.trim();
+        const court = document.getElementById('upcomingCourt').value;
+        const category = document.getElementById('upcomingCategory').value;
 
-        if (!team1 || !team2) return alert("Vui lòng chọn đầy đủ 2 Đội / VĐV trong danh sách!");
-        if (team1 === team2) return alert("2 Bên thi đấu không thể trùng nhau!");
-        if (!time) return alert("Vui lòng chọn thời gian thi đấu!");
-
-        const defaultCategory = matchType === 'singles' ? 'Đánh Đơn' : 'Đánh Đôi';
-        const category = categoryInput ? `${defaultCategory} - ${categoryInput}` : defaultCategory;
+        if (!team1 || !team2) {
+            alert("Vui lòng chọn đủ 2 đội/VĐV thi đấu!");
+            return;
+        }
+        if (team1 === team2) {
+            alert("Hai đội thi đấu không được trùng nhau!");
+            return;
+        }
 
         if (!db.upcomingMatches) db.upcomingMatches = [];
-        db.upcomingMatches.push({ team1, team2, time, court, category, handicap });
-
-        document.getElementById('upcomingTime').value = '';
-        document.getElementById('upcomingCourt').value = '';
-        document.getElementById('upcomingCategory').value = '';
-        document.getElementById('upcomingHandicap').value = '';
+        db.upcomingMatches.push({ type, team1, team2, handicap, time, court, category });
 
         saveData();
+        alert("Đã thêm lịch thi đấu thành công!");
     }
 
-    function deleteUpcomingMatch(index) {
-        if (!isAdminActive) return;
-        if (confirm("Xóa trận đấu này khỏi lịch thi đấu sắp tới?")) {
-            db.upcomingMatches.splice(index, 1);
-            saveData();
-        }
-    }
+    function addNewEntry(type) {
+        const nameInput = document.getElementById(type + 'AddName');
+        const pointsInput = document.getElementById(type + 'AddPoints');
 
-    function renderRankings(mode, tableBodyId, historyListId) {
-        const list = db[mode] || [];
-        const history = db[mode + 'History'] || [];
-
-        list.sort((a,b) => b.points - a.points);
-
-        const body = document.getElementById(tableBodyId);
-        body.innerHTML = list.length === 0 ? '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Chưa có dữ liệu VĐV</td></tr>' : '';
-        
-        list.forEach((item, idx) => {
-            const nameColor = mode === 'doubles' ? 'color:var(--accent);' : 'font-weight:600;';
-            body.innerHTML += `<tr>
-                <td><span class="rank-badge ${idx<3 ? 'top-'+(idx+1):''}">${idx<3 ? '<i class="fa-solid fa-medal"></i>' : idx+1}</span></td>
-                <td style="${nameColor}">${item.name}</td>
-                <td>${item.win || 0}-${item.loss || 0}</td>
-                <td style="color:var(--primary-hover); font-weight:700; text-align: right;">${item.points} Elo</td>
-            </tr>`;
-        });
-
-        const historyContainer = document.getElementById(historyListId);
-        historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); text-align:center; padding:1rem; font-size:0.85rem;">Chưa có trận đấu nào</div>' : '';
-        
-        for (let i = history.length - 1; i >= 0; i--) {
-            const h = history[i];
-            const deleteBtnHtml = isAdminActive ? 
-                `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${mode}', ${i})" title="Xóa lịch sử này"><i class="fa-solid fa-trash-can"></i></button>` : '';
-
-            historyContainer.innerHTML += `
-                <div class="history-item">
-                    <div class="history-content">
-                        <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
-                        <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">${h.note || ''}</div>
-                    </div>
-                    ${deleteBtnHtml}
-                </div>
-            `;
-        }
-    }
-
-    function loadDropdowns(mode) {
-        const list = db[mode] || [];
-        const winnerSelect = document.getElementById(mode + 'MatchWinner');
-        const loserSelect = document.getElementById(mode + 'MatchLoser');
-        if (!winnerSelect || !loserSelect) return;
-
-        const options = list.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
-        winnerSelect.innerHTML = options;
-        loserSelect.innerHTML = options;
-        if (list.length > 1) loserSelect.selectedIndex = 1;
-    }
-
-    function loadManageDropdown(mode) {
-        const list = db[mode] || [];
-        const targetSelect = document.getElementById(mode + 'ManageTarget');
-        if (!targetSelect) return;
-        targetSelect.innerHTML = list.map(item => `<option value="${item.name}">${item.name} (${item.points} Elo)</option>`).join('');
-    }
-
-    function addNewEntry(mode) {
-        if (!isAdminActive) return;
-        const nameInput = document.getElementById(mode + 'AddName');
-        const pointsInput = document.getElementById(mode + 'AddPoints');
         const name = nameInput.value.trim();
         const points = parseInt(pointsInput.value) || 1200;
 
-        if (!name) return alert("Vui lòng nhập tên!");
-        if (db[mode].some(i => i.name === name)) return alert("Tên này đã tồn tại!");
+        if (!name) {
+            alert("Vui lòng nhập tên!");
+            return;
+        }
 
-        db[mode].push({ name, points, win: 0, loss: 0 });
+        if (!db[type]) db[type] = [];
+        if (db[type].some(item => item.name === name)) {
+            alert("Tên này đã tồn tại trong danh sách!");
+            return;
+        }
+
+        db[type].push({ name, points, win: 0, loss: 0 });
         nameInput.value = '';
         saveData();
+        alert("Đã thêm mới thành công!");
     }
 
-    function recordMatch(mode) {
-        if (!isAdminActive) return;
-        const winner = document.getElementById(mode + 'MatchWinner').value;
-        const loser = document.getElementById(mode + 'MatchLoser').value;
-        const note = document.getElementById(mode + 'MatchNote').value.trim();
+    function recordMatch(type) {
+        const winner = document.getElementById(type + 'MatchWinner').value;
+        const loser = document.getElementById(type + 'MatchLoser').value;
+        const note = document.getElementById(type + 'MatchNote').value.trim();
 
-        if (winner === loser) return alert("VĐV thắng và thua không thể là cùng 1 người!");
+        if (!winner || !loser) {
+            alert("Vui lòng chọn cả bên Thắng và bên Thua!");
+            return;
+        }
+        if (winner === loser) {
+            alert("Bên thắng và bên thua không được là cùng 1 đối tượng!");
+            return;
+        }
 
-        let winnerObj = db[mode].find(i => i.name === winner);
-        let loserObj = db[mode].find(i => i.name === loser);
-
-        const K = 32;
-        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
-        const pointChange = Math.round(K * (1 - expectedWinner));
-
-        winnerObj.points += pointChange;
-        loserObj.points = Math.max(0, loserObj.points - pointChange);
-        winnerObj.win = (winnerObj.win || 0) + 1;
-        loserObj.loss = (loserObj.loss || 0) + 1;
-
-        if (!db[mode + 'History']) db[mode + 'History'] = [];
-        db[mode + 'History'].push({
-            winner, loser, note: note ? `${note} (+${pointChange} pts)` : `(+${pointChange} pts)`
-        });
-
-        document.getElementById(mode + 'MatchNote').value = '';
-        saveData();
-    }
-
-    function deleteEntry(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        if (confirm(`Bạn có chắc muốn xóa [${target}]?`)) {
-            db[mode] = db[mode].filter(i => i.name !== target);
+        if (processEloMatch(type, winner, loser, note)) {
+            document.getElementById(type + 'MatchNote').value = '';
             saveData();
+            alert("Đã ghi nhận kết quả và cập nhật Elo!");
         }
     }
 
-    function editPoints(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        const obj = db[mode].find(i => i.name === target);
-        if (!obj) return;
+    function deleteEntry(type) {
+        const name = document.getElementById(type + 'ManageTarget').value;
+        if (!name) {
+            alert("Vui lòng chọn đối tượng cần xóa!");
+            return;
+        }
 
-        const newPoints = prompt(`Nhập điểm Elo mới cho [${target}]:`, obj.points);
-        if (newPoints !== null && !isNaN(newPoints)) {
-            obj.points = parseInt(newPoints);
+        if (confirm(`Bạn có chắc muốn xóa "${name}" khỏi danh sách?`)) {
+            db[type] = db[type].filter(item => item.name !== name);
             saveData();
+            alert("Đã xóa thành công!");
         }
     }
 
-    function deleteHistory(mode, index) {
-        if (!isAdminActive) return;
-        if (confirm("Xóa lịch sử trận đấu này?")) {
-            db[mode + 'History'].splice(index, 1);
+    function editPoints(type) {
+        const name = document.getElementById(type + 'ManageTarget').value;
+        if (!name) {
+            alert("Vui lòng chọn đối tượng cần sửa!");
+            return;
+        }
+
+        const target = db[type].find(item => item.name === name);
+        if (!target) return;
+
+        const newElo = prompt(`Nhập điểm Elo mới cho ${name}:`, target.points);
+        if (newElo !== null && !isNaN(newElo)) {
+            target.points = parseInt(newElo);
             saveData();
+            alert("Đã cập nhật điểm Elo thành công!");
         }
     }
 </script>
