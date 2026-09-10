@@ -325,7 +325,7 @@
 
         <div class="upcoming-section">
             <div class="card-title" style="font-size: 1.25rem; color: var(--primary-hover); margin-bottom: 0;">
-                <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP / ĐANG DIỄN RA
+                <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP / Đang DIỄN RA
             </div>
             <div class="upcoming-grid" id="upcomingMatchesGrid"></div>
         </div>
@@ -862,17 +862,21 @@
             return;
         }
 
-        const newPairName = `${p1} & ${p2}`;
+        // Kiểm tra cả 2 chiều (A & B hoặc B & A) để tránh trùng lặp
+        const pairName1 = `${p1} & ${p2}`;
+        const pairName2 = `${p2} & ${p1}`;
 
         if (!db.doubles) db.doubles = [];
-        if (db.doubles.some(item => item.name === newPairName)) {
-            alert("Cặp đôi này đã tồn tại trong danh sách!");
+        const exists = db.doubles.some(item => item.name === pairName1 || item.name === pairName2);
+
+        if (exists) {
+            alert("Cặp đôi này (hoặc ngược lại vị trí) đã tồn tại trong danh sách!");
             return;
         }
 
-        db.doubles.push({ name: newPairName, points: points, win: 0, loss: 0 });
+        db.doubles.push({ name: pairName1, points: points, win: 0, loss: 0 });
         saveData();
-        alert(`Đã thêm cặp đôi "${newPairName}" thành công!`);
+        alert(`Đã thêm cặp đôi "${pairName1}" thành công!`);
     }
 
     function recordDoublesMatch() {
