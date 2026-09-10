@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -434,20 +433,10 @@ HTML
                         <button class="btn" style="background:var(--doubles-color);" onclick="addNewPairFromSelection()"><i class="fa-solid fa-users-plus"></i> Tạo Cặp Đôi Mới</button>
                     </div>
                     <div>
-                        <label style="color: var(--accent); font-weight: bold; display: block; margin-bottom: 6px;">ĐỘI THẮNG</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div class="form-group"><select id="doublesWinner1"></select></div>
-                            <div class="form-group"><select id="doublesWinner2"></select></div>
-                        </div>
-
-                        <label style="color: var(--danger); font-weight: bold; display: block; margin-bottom: 6px; margin-top: 4px;">ĐỘI THUA</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div class="form-group"><select id="doublesLoser1"></select></div>
-                            <div class="form-group"><select id="doublesLoser2"></select></div>
-                        </div>
-
+                        <div class="form-group"><label style="color: var(--primary-hover); font-weight: bold;">ĐỘI THẮNG</label><select id="doublesWinner"></select></div>
+                        <div class="form-group"><label style="color: var(--danger); font-weight: bold;">ĐỘI THUA</label><select id="doublesLoser"></select></div>
                         <div class="form-group"><label>Ghi chú / Tỉ số</label><input type="text" id="doublesMatchNote" placeholder="Ví dụ: 2-1"></div>
-                        <button class="btn" style="background:#2563eb;" onclick="recordDoublesMatch()"><i class="fa-solid fa-check"></i> Lưu kết quả Đôi</button>
+                        <button class="btn" style="background:#2563eb; margin-top: 0.8rem;" onclick="recordDoublesMatch()"><i class="fa-solid fa-check"></i> Lưu kết quả Đôi</button>
                     </div>
                 </div>
                 <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
@@ -858,15 +847,11 @@ HTML
                 optionsDoubles += `<option value="${item.name}">${item.name} (${item.points} pts)</option>`;
             });
 
-            const w1 = document.getElementById('doublesWinner1');
-            const w2 = document.getElementById('doublesWinner2');
-            const l1 = document.getElementById('doublesLoser1');
-            const l2 = document.getElementById('doublesLoser2');
-            if (w1 && w2 && l1 && l2) {
-                w1.innerHTML = optionsDoubles;
-                w2.innerHTML = optionsDoubles;
-                l1.innerHTML = optionsDoubles;
-                l2.innerHTML = optionsDoubles;
+            const winnerSelect = document.getElementById('doublesWinner');
+            const loserSelect = document.getElementById('doublesLoser');
+            if (winnerSelect && loserSelect) {
+                winnerSelect.innerHTML = optionsDoubles;
+                loserSelect.innerHTML = optionsDoubles;
             }
         }
     }
@@ -902,40 +887,24 @@ HTML
     }
 
     function recordDoublesMatch() {
-        const p1 = document.getElementById('doublesWinner1').value;
-        const p2 = document.getElementById('doublesWinner2').value;
-        const p3 = document.getElementById('doublesLoser1').value;
-        const p4 = document.getElementById('doublesLoser2').value;
+        const winnerName = document.getElementById('doublesWinner').value;
+        const loserName = document.getElementById('doublesLoser').value;
         const note = document.getElementById('doublesMatchNote').value.trim();
 
-        if (!p1 || !p2 || !p3 || !p4) {
-            alert("Vui lòng chọn đầy đủ 4 thành viên cho 2 đội!");
+        if (!winnerName || !loserName) {
+            alert("Vui lòng chọn đầy đủ Đội Thắng và Đội Thua!");
             return;
         }
-
-        const winnerName = `${p1} & ${p2}`;
-        const loserName = `${p3} & ${p4}`;
 
         if (winnerName === loserName) {
             alert("Đội thắng và đội thua không được trùng nhau!");
             return;
         }
 
-        ensurePairExists(winnerName);
-        ensurePairExists(loserName);
-
         if (processEloMatch('doubles', winnerName, loserName, note)) {
             document.getElementById('doublesMatchNote').value = '';
             saveData();
             alert("Đã ghi nhận kết quả đánh đôi và cập nhật Elo thành công!");
-        }
-    }
-
-    function ensurePairExists(pairName) {
-        if (!db.doubles) db.doubles = [];
-        let exists = db.doubles.find(item => item.name === pairName);
-        if (!exists) {
-            db.doubles.push({ name: pairName, points: 1200, win: 0, loss: 0 });
         }
     }
 
@@ -969,7 +938,7 @@ HTML
     }
 
     function addUpcomingMatch() {
-        const type = document.getElementById('upcomingType.value') || document.getElementById('upcomingType').value;
+        const type = document.getElementById('upcomingType').value;
         const team1 = document.getElementById('upcomingTeam1').value;
         const team2 = document.getElementById('upcomingTeam2').value;
         const handicap = document.getElementById('upcomingHandicap').value;
