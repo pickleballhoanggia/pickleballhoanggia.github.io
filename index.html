@@ -424,9 +424,13 @@
                 <div class="card-title doubles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)</div>
                 <div class="admin-card-grid">
                     <div>
-                        <div class="form-group"><label>Tên Cặp Đôi Mới (Thêm VĐV/Cặp)</label><input type="text" id="doublesAddName" placeholder="Ví dụ: Tuấn & Hoàng..."></div>
+                        <label style="color: var(--doubles-color); font-weight: bold; display: block; margin-bottom: 6px;">THÊM CẶP ĐÔI MỚI (CHỌN 2 VĐV)</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div class="form-group"><label>VĐV A</label><select id="doublesNewPlayer1"></select></div>
+                            <div class="form-group"><label>VĐV B</label><select id="doublesNewPlayer2"></select></div>
+                        </div>
                         <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="doublesAddPoints" value="1200"></div>
-                        <button class="btn" style="background:var(--doubles-color);" onclick="addNewEntry('doubles')"><i class="fa-solid fa-users-plus"></i> Thêm Cặp Đôi</button>
+                        <button class="btn" style="background:var(--doubles-color);" onclick="addNewPairFromSelection()"><i class="fa-solid fa-users-plus"></i> Tạo Cặp Đôi Mới</button>
                     </div>
                     <div>
                         <label style="color: var(--accent); font-weight: bold; display: block; margin-bottom: 6px;">ĐỘI THẮNG</label>
@@ -689,7 +693,6 @@
         }
     }
 
-    // XÁC NHẬN KẾT THÚC TRẬN ĐẤU (Cho phép chọn 1 hoặc 2)
     function finishUpcomingMatch(idx) {
         const match = db.upcomingMatches[idx];
         if (!match) return;
@@ -727,7 +730,6 @@
         }
     }
 
-    // TÍNH TOÁN ĐIỂM ELO
     function calculateElo(winnerRating, loserRating, k = 32) {
         const expectedWinner = 1 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
         const expectedLoser = 1 / (1 + Math.pow(10, (winnerRating - loserRating) / 400));
@@ -738,7 +740,6 @@
         return { winnerGain, loserLoss };
     }
 
-    // CẬP NHẬT TRẬN ĐẤU & HIỂN THỊ ELO DẠNG (+X/-Y Elo)
     function processEloMatch(type, winnerName, loserName, note) {
         const list = db[type] || [];
         const winnerObj = list.find(item => item.name === winnerName);
@@ -751,7 +752,7 @@
 
         const elo = calculateElo(winnerObj.points, loserObj.points);
         winnerObj.points += elo.winnerGain;
-        winnerObj.points += elo.loserLoss; // loserLoss đã mang dấu âm
+        winnerObj.points += elo.loserLoss;
 
         winnerObj.win = (winnerObj.win || 0) + 1;
         loserObj.loss = (loserObj.loss || 0) + 1;
@@ -821,6 +822,7 @@
         }
     }
 
+    // Load các dropdown đánh đơn & đánh đôi
     function loadDropdowns(type) {
         if (type === 'singles') {
             const winnerSelect = document.getElementById('singlesMatchWinner');
@@ -836,23 +838,68 @@
             winnerSelect.innerHTML = options;
             loserSelect.innerHTML = options;
         } else if (type === 'doubles') {
+            // Lấy danh sách VĐV đơn lẻ (lấy từ bảng Singles để làm nguồn chọn ghép đôi) hoặc có thể lấy từ danh sách tự do. Ở đây ta dùng danh sách Singles để chọn thành viên A, B tạo cặp.
+            const singlesList = db['singles'] || [];
+            let optionsSingle = '<option value="">-- Chọn VĐV --</option>';
+            singlesList.forEach(item => {
+                optionsSingle += `<option value="${item.name}">${item.name}</option>`;
+            });
+
+            const np1 = document.getElementById('doublesNewPlayer1');
+            const np2 = document.getElementById('doublesNewPlayer2');
+            if (np1 && np2) {
+                np1.innerHTML = optionsSingle;
+                np2.innerHTML = optionsSingle;
+            }
+
+            // Load danh sách cho 4 ô chọn đội đánh đôi
+            const doublesList = db['doubles'] || [];
+            let optionsDoubles = '<option value="">-- Chọn --</option>';
+            doublesList.forEach(item => {
+                optionsDoubles += `<option value="${item.name}">${item.name} (${item.points} pts)</option>`;
+            });
+
             const w1 = document.getElementById('doublesWinner1');
             const w2 = document.getElementById('doublesWinner2');
             const l1 = document.getElementById('doublesLoser1');
             const l2 = document.getElementById('doublesLoser2');
-            if (!w1 || !w2 || !l1 || !l2) return;
-
-            const list = db['doubles'] || [];
-            let options = '<option value="">-- Chọn --</option>';
-            list.forEach(item => {
-                options += `<option value="${item.name}">${item.name} (${item.points} pts)</option>`;
-            });
-
-            w1.innerHTML = options;
-            w2.innerHTML = options;
-            l1.innerHTML = options;
-            l2.innerHTML = options;
+            if (w1 && w2 && l1 && l2) {
+                w1.innerHTML = optionsDoubles;
+                w2.innerHTML = optionsDoubles;
+                l1.innerHTML = optionsDoubles;
+                l2.innerHTML = optionsDoubles;
+            }
         }
+    }
+
+    // Hàm tạo cặp đôi mới từ việc chọn 2 VĐV lẻ
+    function addNewPairFromSelection() {
+        const p1 = document.getElementById('doublesNewPlayer1').value;
+        const p2 = document.getElementById('doublesNewPlayer2').value;
+        const pointsInput = document.getElementById('doublesAddPoints');
+        const points = parseInt(pointsInput.value) || 1200;
+
+        if (!p1 || !p2) {
+            alert("Vui lòng chọn đầy đủ VĐV A và VĐV B!");
+            return;
+        }
+
+        if (p1 === p2) {
+            alert("VĐV A và VĐV B không được trùng nhau trong cùng một cặp!");
+            return;
+        }
+
+        const newPairName = `${p1} & ${p2}`;
+
+        if (!db.doubles) db.doubles = [];
+        if (db.doubles.some(item => item.name === newPairName)) {
+            alert("Cặp đôi này đã tồn tại trong danh sách!");
+            return;
+        }
+
+        db.doubles.push({ name: newPairName, points: points, win: 0, loss: 0 });
+        saveData();
+        alert(`Đã thêm cặp đôi "${newPairName}" thành công!`);
     }
 
     function recordDoublesMatch() {
