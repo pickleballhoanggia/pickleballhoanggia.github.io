@@ -154,7 +154,6 @@
         }
 
         .hero-dot {
-            width: 100px;
             width: 10px;
             height: 10px;
             border-radius: 50%;
@@ -473,7 +472,7 @@
     setInterval(nextHeroSlide, 5000);
 
     // =========================================================
-    // HÀM ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET MỚI CỦA BẠN
+    // HÀM ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEET MỚI (Ô M7)
     // =========================================================
     function fetchSheetBalance() {
         const sheetID = "1PNwn5r0Jc8ENXYYlrmjkHBIXWNrH3L_aFpjF_Fm-810";
@@ -487,19 +486,31 @@
             .then(data => {
                 const json = JSON.parse(data.substring(47, data.length - 2));
                 if (json.table && json.table.rows && json.table.rows.length > 0) {
-                    let val = json.table.rows[0].c[0]?.v;
-                    if (val !== undefined && val !== null) {
-                        if (typeof val === 'number') {
-                            val = val.toLocaleString('vi-VN');
+                    const cell = json.table.rows[0].c[0];
+                    if (cell) {
+                        // Ưu tiên lấy định dạng hiển thị trực tiếp từ Google Sheet (cell.f)
+                        let formattedVal = cell.f || cell.v;
+
+                        if (formattedVal !== undefined && formattedVal !== null) {
+                            // Nếu giá trị trả về là số thuần túy
+                            if (typeof formattedVal === 'number') {
+                                formattedVal = formattedVal.toLocaleString('vi-VN') + 'đ';
+                            } else {
+                                formattedVal = String(formattedVal).trim();
+                                // Nếu chuỗi chưa có ký hiệu tiền tệ thì tự động thêm 'đ'
+                                if (!formattedVal.toLowerCase().includes('đ') && !formattedVal.toLowerCase().includes('vnd')) {
+                                    formattedVal += 'đ';
+                                }
+                            }
+                            document.getElementById('fundBalance').innerText = formattedVal;
+                            return;
                         }
-                        document.getElementById('fundBalance').innerText = val + 'đ';
-                        return;
                     }
                 }
                 document.getElementById('fundBalance').innerText = "0đ";
             })
             .catch(err => {
-                console.error("Lỗi khi tải dữ liệu từ Google Sheets:", err);
+                console.error("Lỗi khi tải dữ liệu từ Google Sheet:", err);
                 document.getElementById('fundBalance').innerText = "0đ";
             });
     }
