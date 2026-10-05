@@ -95,7 +95,6 @@
             border-color: var(--accent);
         }
 
-        /* Thẻ thống kê & Bảng */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -162,7 +161,6 @@
         .top-2 { background: #94a3b8; color: #000; }
         .top-3 { background: #d97706; color: #fff; }
 
-        /* Lịch sử đấu & Lịch sắp tới */
         .history-list, .upcoming-grid {
             display: flex;
             flex-direction: column;
@@ -239,7 +237,6 @@
             justify-content: space-between;
         }
 
-        /* Admin Controls */
         .admin-section {
             display: none;
             background: rgba(30, 41, 59, 0.95);
@@ -322,7 +319,7 @@
         </div>
     </header>
 
-    <!-- Admin Panel (Chỉ hiển thị khi bật chế độ Admin) -->
+    <!-- Admin Panel -->
     <div class="admin-section" id="adminSectionArea">
         <h3><i class="fa-solid fa-screwdriver-wrench"></i> Bảng Điều Khiển Quản Trị Viên</h3>
         
@@ -415,9 +412,7 @@
                             <th style="text-align: right; width: 80px;">Elo</th>
                         </tr>
                     </thead>
-                    <tbody id="singlesBody">
-                        <!-- Render dynamic -->
-                    </tbody>
+                    <tbody id="singlesBody"></tbody>
                 </table>
             </div>
             <div style="margin-top: 1rem;">
@@ -439,9 +434,7 @@
                             <th style="text-align: right; width: 80px;">Elo</th>
                         </tr>
                     </thead>
-                    <tbody id="doublesBody">
-                        <!-- Render dynamic -->
-                    </tbody>
+                    <tbody id="doublesBody"></tbody>
                 </table>
             </div>
             <div style="margin-top: 1rem;">
@@ -454,18 +447,16 @@
     <!-- Lịch thi đấu sắp tới -->
     <div class="card" style="margin-bottom: 2rem;">
         <div class="card-title"><i class="fa-solid fa-calendar-days"></i> Lịch Thi Đấu Sắp Tới</div>
-        <div class="upcoming-grid" id="upcomingMatchesGrid">
-            <!-- Render dynamic -->
-        </div>
+        <div class="upcoming-grid" id="upcomingMatchesGrid"></div>
     </div>
 </div>
 
 <script>
-    // 1. TÍCH HỢP GOOGLE SHEET MỚI (Đọc số dư quỹ từ link của bạn)
+    // 1. KẾT NỐI GOOGLE SHEET MỚI
     function fetchSheetBalance() {
         const sheetID = "1D1J5pPQoHXru3HcH1tpDXMdBcO29h6oHzQiwVA4zdiA";
         const gid = "1274338359";
-        const range = "M7"; // Ô chứa số dư quỹ (Bạn có thể đổi lại nếu ô chứa thay đổi)
+        const range = "M7"; // Ô chứa số dư quỹ trên Google Sheet
         const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=${range}`;
 
         document.getElementById('fundBalance').innerText = "Đang tải...";
