@@ -1005,6 +1005,14 @@
 
     setInterval(nextHeroSlide, 5000);
 
+    // --- CHUẨN HÓA MẢNG RỖNG CHỐNG TRÙNG LẶP DỮ LIỆU CŨ ---
+    function ensureArray(val) {
+        if (!val) return [];
+        if (Array.isArray(val)) return val.filter(item => item !== null && item !== undefined);
+        if (typeof val === 'object') return Object.values(val).filter(item => item !== null && item !== undefined);
+        return [];
+    }
+
     // --- LẤY DỮ LIỆU TỪ GOOGLE SHEET MỚI (TỒN QUỸ M7) ---
     function fetchSheetBalance() {
         const sheetID = "1D1J5pPQoHXru3HcH1tpDXMdBcO29h6oHzQiwVA4zdiA";
@@ -1064,40 +1072,38 @@
     const ADMIN_PASSWORD = "123456";
     let isAdminActive = false;
 
-    const defaultData = {
-        singles: [
-            { name: "Alex", points: 1216, win: 1, loss: 0 },
-            { name: "Victor", points: 1184, win: 0, loss: 1 }
-        ],
-        singlesHistory: [
-            { winner: "Alex", loser: "Victor", note: "2-0 (+16/-16 Elo)" }
-        ],
-        doubles: [
-            { name: "Tuấn & Nam", points: 1280, win: 7, loss: 2 },
-            { name: "Đức & Anh", points: 1210, win: 4, loss: 4 }
-        ],
-        doublesHistory: [
-            { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "2-1 (+15/-15 Elo)" }
-        ],
+    // DỮ LIỆU BAN ĐẦU RỖNG - KHÔNG CHỨA TÊN VĐV CỐ ĐỊNH
+    let db = {
+        singles: [],
+        singlesHistory: [],
+        doubles: [],
+        doublesHistory: [],
         upcomingMatches: []
     };
-
-    let db = defaultData;
 
     dbRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
             db = {
-                singles: data.singles || [],
-                singlesHistory: data.singlesHistory || [],
-                doubles: data.doubles || [],
-                doublesHistory: data.doublesHistory || [],
-                upcomingMatches: data.upcomingMatches || []
+                singles: ensureArray(data.singles),
+                singlesHistory: ensureArray(data.singlesHistory),
+                doubles: ensureArray(data.doubles),
+                doublesHistory: ensureArray(data.doublesHistory),
+                upcomingMatches: ensureArray(data.upcomingMatches)
             };
         } else {
-            saveData();
+            db = {
+                singles: [],
+                singlesHistory: [],
+                doubles: [],
+                doublesHistory: [],
+                upcomingMatches: []
+            };
         }
         initApp();
+    }, (err) => {
+        console.error("Lỗi kết nối Firebase:", err);
+        alert("LỖI KẾT NỐI FIREBASE: " + err.message + "\nHãy kiểm tra lại phần Rules trên Firebase Console!");
     });
 
     function toggleAdminMode() {
@@ -1122,8 +1128,20 @@
     }
 
     function saveData() {
-        dbRef.set(db);
-        initApp(); // Cập nhật lại giao diện ngay lập tức sau khi lưu
+        db.singles = ensureArray(db.singles);
+        db.singlesHistory = ensureArray(db.singlesHistory);
+        db.doubles = ensureArray(db.doubles);
+        db.doublesHistory = ensureArray(db.doublesHistory);
+        db.upcomingMatches = ensureArray(db.upcomingMatches);
+
+        initApp();
+
+        dbRef.set(db).then(() => {
+            console.log("Đã lưu dữ liệu lên Firebase thành công!");
+        }).catch(err => {
+            console.error("Lỗi khi lưu lên Firebase:", err);
+            alert("KHÔNG LƯU ĐƯỢC LÊN FIREBASE!\nLỗi: " + err.message + "\n\n-> Vui lòng mở Firebase Console -> Realtime Database -> Rules và sửa thành:\n{\n  \"rules\": {\n    \".read\": true,\n    \".write\": true\n  }\n}");
+        });
     }
 
     function initApp() {
@@ -1227,7 +1245,7 @@
             return;
         }
 
-        db.upcomingMatches = db.upcomingMatches || [];
+        db.upcomingMatches = ensureArray(db.upcomingMatches);
         db.upcomingMatches.push({ type, team1, team2, handicap, time, court, category });
         saveData();
 
@@ -1238,18 +1256,26 @@
     }
 
     function deleteUpcomingMatch(index) {
+        db.upcomingMatches = ensureArray(db.upcomingMatches);
         if (confirm("Bạn có chắc chắn muốn xóa trận đấu này khỏi lịch không?")) {
-            db.upcomingMatches.splice(index, 1);
-            saveData();
+            if (index >= 0 && index < db.upcomingMatches.length) {
+                db.upcomingMatches.splice(index, 1);
+                saveData();
+            }
         }
     }
 
     function finishUpcomingMatch(idx) {
+        db.upcomingMatches = ensureArray(db.upcomingMatches);
         const match = db.upcomingMatches[idx];
+        if (!match) return;
+
         let winnerName = prompt(`Trận đấu: ${match.team1} vs ${match.team2}\nNhập chính xác tên Đội/VĐV THẮNG cuộc:`, match.team1);
         if (!winnerName) return;
 
         let type = match.type;
+        db[type] = ensureArray(db[type]);
+
         let winnerIdx = db[type].findIndex(item => item.name.toLowerCase() === winnerName.trim().toLowerCase());
         let loserName = match.team1.toLowerCase() === winnerName.trim().toLowerCase() ? match.team2 : match.team1;
         let loserIdx = db[type].findIndex(item => item.name.toLowerCase() === loserName.toLowerCase());
@@ -1275,7 +1301,7 @@
         winner.win = (winner.win || 0) + 1;
         loser.loss = (loser.loss || 0) + 1;
 
-        if (!db[type + 'History']) db[type + 'History'] = [];
+        db[type + 'History'] = ensureArray(db[type + 'History']);
         db[type + 'History'].push({
             winner: winner.name,
             loser: loser.name,
@@ -1290,10 +1316,10 @@
     function renderRankings(type, tbodyId, historyListId) {
         const tbody = document.getElementById(tbodyId);
         const list = document.getElementById(historyListId);
-        const data = [...(db[type] || [])].sort((a, b) => b.points - a.points);
-        const historyData = db[type + 'History'] || [];
+        const data = ensureArray(db[type]).sort((a, b) => b.points - a.points);
+        const historyData = ensureArray(db[type + 'History']);
 
-        tbody.innerHTML = data.length === 0 ? '<tr><td colspan="4" style="text-align:center;">Chưa có dữ liệu</td></tr>' : '';
+        tbody.innerHTML = data.length === 0 ? '<tr><td colspan="4" style="text-align:center;">Chưa có dữ liệu VĐV</td></tr>' : '';
         data.forEach((item, index) => {
             let rankClass = index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : '';
             let medal = index === 0 ? '<i class="fa-solid fa-crown"></i> ' : '';
@@ -1342,6 +1368,7 @@
             return;
         }
 
+        db[type] = ensureArray(db[type]);
         const winnerObj = db[type].find(i => i.name === winnerName);
         const loserObj = db[type].find(i => i.name === loserName);
 
@@ -1355,7 +1382,7 @@
         loserObj.points -= eloChange;
         loserObj.loss = (loserObj.loss || 0) + 1;
 
-        db[type + 'History'] = db[type + 'History'] || [];
+        db[type + 'History'] = ensureArray(db[type + 'History']);
         db[type + 'History'].push({
             winner: winnerName,
             loser: loserName,
@@ -1381,6 +1408,7 @@
             return;
         }
 
+        db.doubles = ensureArray(db.doubles);
         const winnerObj = db.doubles.find(i => i.name === winnerName);
         const loserObj = db.doubles.find(i => i.name === loserName);
 
@@ -1394,7 +1422,7 @@
         loserObj.points -= eloChange;
         loserObj.loss = (loserObj.loss || 0) + 1;
 
-        db.doublesHistory = db.doublesHistory || [];
+        db.doublesHistory = ensureArray(db.doublesHistory);
         db.doublesHistory.push({
             winner: winnerName,
             loser: loserName,
@@ -1417,15 +1445,16 @@
             return;
         }
 
+        db[type] = ensureArray(db[type]);
         if (db[type].some(i => i.name.toLowerCase() === name.toLowerCase())) {
-            alert("Tên này đã tồn tại trong danh sách!");
+            alert("Tên VĐV này đã tồn tại trong danh sách!");
             return;
         }
 
-        db[type].push({ name, points, win: 0, loss: 0 });
+        db[type].push({ name: name, points: points, win: 0, loss: 0 });
         saveData();
         nameInput.value = '';
-        alert("Đã thêm VĐV mới thành công!");
+        alert(`Đã thêm VĐV "${name}" thành công!`);
     }
 
     function addNewPairFromSelection() {
@@ -1445,25 +1474,28 @@
         const pairName = `${p1} & ${p2}`;
         const altPairName = `${p2} & ${p1}`;
 
+        db.doubles = ensureArray(db.doubles);
         if (db.doubles.some(i => i.name === pairName || i.name === altPairName)) {
             alert("Cặp đôi này đã tồn tại!");
             return;
         }
 
-        db.doubles.push({ name: pairName, points, win: 0, loss: 0 });
+        db.doubles.push({ name: pairName, points: points, win: 0, loss: 0 });
         saveData();
-        alert("Đã tạo cặp đôi mới thành công!");
+        alert(`Đã tạo cặp đôi "${pairName}" thành công!`);
     }
 
     function deleteEntry(type) {
+        db[type] = ensureArray(db[type]);
         const selectId = type === 'singles' ? 'singlesManageTarget' : 'doublesManageTarget';
         const select = document.getElementById(selectId);
         if (!select || select.value === "") {
             alert("Vui lòng chọn VĐV/Cặp đôi cần xóa!");
             return;
         }
+
         const idx = parseInt(select.value);
-        if (isNaN(idx) || !db[type][idx]) return;
+        if (isNaN(idx) || idx < 0 || idx >= db[type].length) return;
 
         const itemName = db[type][idx].name;
         if (confirm(`Bạn có chắc chắn muốn xóa "${itemName}" khỏi bảng xếp hạng?`)) {
@@ -1474,12 +1506,16 @@
     }
 
     function editPoints(type) {
+        db[type] = ensureArray(db[type]);
         const selectId = type === 'singles' ? 'singlesManageTarget' : 'doublesManageTarget';
         const select = document.getElementById(selectId);
-        if (!select || select.value === "") return;
+        if (!select || select.value === "") {
+            alert("Vui lòng chọn đối tượng cần sửa!");
+            return;
+        }
 
         const idx = parseInt(select.value);
-        if (isNaN(idx) || !db[type][idx]) return;
+        if (isNaN(idx) || idx < 0 || idx >= db[type].length) return;
 
         const item = db[type][idx];
         const newPts = prompt(`Nhập điểm Elo mới cho ${item.name}:`, item.points);
@@ -1491,9 +1527,11 @@
     }
 
     function deleteHistory(type, idx) {
+        const key = type + 'History';
+        db[key] = ensureArray(db[key]);
         if (confirm("Bạn có chắc chắn muốn xóa trận đấu này khỏi lịch sử không?")) {
-            if (db[type + 'History'] && db[type + 'History'][idx] !== undefined) {
-                db[type + 'History'].splice(idx, 1);
+            if (idx >= 0 && idx < db[key].length) {
+                db[key].splice(idx, 1);
                 saveData();
             }
         }
@@ -1502,7 +1540,7 @@
     function loadDropdowns(type) {
         const winnerSelect = document.getElementById(type === 'singles' ? 'singlesMatchWinner' : 'doublesWinner');
         const loserSelect = document.getElementById(type === 'singles' ? 'singlesMatchLoser' : 'doublesLoser');
-        const data = db[type] || [];
+        const data = ensureArray(db[type]);
 
         winnerSelect.innerHTML = '<option value="">-- Chọn Đội/VĐV Thắng --</option>';
         loserSelect.innerHTML = '<option value="">-- Chọn Đội/VĐV Thua --</option>';
@@ -1515,7 +1553,7 @@
         if (type === 'doubles') {
             const p1Select = document.getElementById('doublesNewPlayer1');
             const p2Select = document.getElementById('doublesNewPlayer2');
-            const singlesData = db.singles || [];
+            const singlesData = ensureArray(db.singles);
 
             p1Select.innerHTML = '<option value="">-- VĐV A --</option>';
             p2Select.innerHTML = '<option value="">-- VĐV B --</option>';
@@ -1530,7 +1568,7 @@
     function loadManageDropdown(type) {
         const selectId = type === 'singles' ? 'singlesManageTarget' : 'doublesManageTarget';
         const select = document.getElementById(selectId);
-        const data = db[type] || [];
+        const data = ensureArray(db[type]);
         select.innerHTML = '<option value="">-- Chọn đối tượng quản lý --</option>';
         data.forEach((item, idx) => {
             select.innerHTML += `<option value="${idx}">${item.name} (${item.points} Elo)</option>`;
@@ -1541,7 +1579,7 @@
         const type = document.getElementById('upcomingType').value;
         const t1 = document.getElementById('upcomingTeam1');
         const t2 = document.getElementById('upcomingTeam2');
-        const data = db[type] || [];
+        const data = ensureArray(db[type]);
 
         t1.innerHTML = '<option value="">-- Chọn VĐV/Đội 1 --</option>';
         t2.innerHTML = '<option value="">-- Chọn VĐV/Đội 2 --</option>';
