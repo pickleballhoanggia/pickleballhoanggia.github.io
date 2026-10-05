@@ -21,682 +21,135 @@
             --doubles-color: #a855f7;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text); padding: 2rem 1rem; min-height: 100vh; }
+        .container { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; }
+        
+        header { text-align: center; margin-bottom: 2rem; padding-right: 40px; }
+        header h1 { font-size: 2.5rem; color: var(--primary-hover); text-transform: uppercase; letter-spacing: 2px; }
+        header p { color: var(--text-muted); font-size: 1rem; margin-top: 0.5rem; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text);
-            padding: 2rem 1rem;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-right: 40px;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            color: var(--primary-hover);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        /* HERO BANNER STYLES */
         .hero-banner {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            position: relative; width: 100%; height: 380px; border-radius: 16px; overflow: hidden; margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
-
-        .hero-slides {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
+        .hero-slides { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out, transform 6s ease-out;
-            background-size: cover;
-            background-position: center;
-            transform: scale(1);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0;
+            transition: opacity 1s ease-in-out, transform 6s ease-out; background-size: cover; background-position: center; transform: scale(1);
         }
-
-        .hero-slide.active {
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
+        .hero-slide.active { opacity: 1; transform: scale(1.05); }
         .hero-overlay {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.85) 85%, #0f172a 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 2.5rem;
-            z-index: 2;
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem; z-index: 2;
         }
-
-        .hero-content {
-            max-width: 700px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
+        .hero-content { max-width: 700px; animation: fadeInUp 0.8s ease-out; }
         .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--primary-hover);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.8rem;
-            backdrop-filter: blur(4px);
+            display: inline-flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.2); color: var(--primary-hover);
+            border: 1px solid rgba(34, 197, 94, 0.4); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;
+            text-transform: uppercase; margin-bottom: 0.8rem; backdrop-filter: blur(4px);
         }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: 0.8rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-title span {
-            color: var(--primary-hover);
-        }
-
-        .hero-desc {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
+        .hero-title { font-size: 2.5rem; font-weight: 800; color: #ffffff; line-height: 1.2; margin-bottom: 0.8rem; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); }
+        .hero-title span { color: var(--primary-hover); }
+        .hero-desc { color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
         .btn-hero {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
+            padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s; border: none;
         }
+        .btn-hero-primary { background: var(--primary); color: white; }
+        .btn-hero-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-hero-secondary { background: rgba(255, 255, 255, 0.1); color: white; backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-hero-secondary:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+        .hero-dots { position: absolute; bottom: 20px; right: 25px; display: flex; gap: 8px; z-index: 3; }
+        .hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; transition: 0.3s; }
+        .hero-dot.active { background: var(--primary-hover); width: 28px; border-radius: 10px; }
 
-        .btn-hero-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-hero-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-hero-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-hero-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .hero-dots {
-            position: absolute;
-            bottom: 20px;
-            right: 25px;
-            display: flex;
-            gap: 8px;
-            z-index: 3;
-        }
-
-        .hero-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .hero-dot.active {
-            background: var(--primary-hover);
-            width: 28px;
-            border-radius: 10px;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
-            .hero-banner {
-                height: 320px;
-            }
-            .hero-overlay {
-                padding: 1.5rem;
-            }
-            .hero-title {
-                font-size: 1.75rem;
-            }
-            .hero-desc {
-                font-size: 0.85rem;
-                margin-bottom: 1rem;
-            }
-            .hero-dots {
-                bottom: 15px;
-                right: 15px;
-            }
+            .hero-banner { height: 320px; }
+            .hero-overlay { padding: 1.5rem; }
+            .hero-title { font-size: 1.75rem; }
+            .hero-desc { font-size: 0.85rem; margin-bottom: 1rem; }
+            .hero-dots { bottom: 15px; right: 15px; }
         }
 
         .admin-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #334155;
-            color: var(--text-muted);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-            z-index: 10;
+            position: absolute; top: 10px; right: 10px; background: #334155; color: var(--text-muted);
+            border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;
         }
+        .admin-toggle.active { background: var(--primary); color: white; }
 
-        .admin-toggle.active {
-            background: var(--primary);
-            color: white;
-        }
+        .main-layout { display: flex; flex-direction: column; gap: 2rem; }
+        .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto; width: 100%; }
+        .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
+        .qr-container { text-align: center; margin-bottom: 1rem; }
+        .qr-code { max-width: 240px; border-radius: 8px; border: 2px solid #334155; }
+        .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
 
-        .main-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
+        .upcoming-section { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; }
+        .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
+        .match-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; width: 100%; }
+        .match-time { color: var(--accent); font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; flex: 1; word-break: break-word; }
+        .match-badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; flex-shrink: 0; }
+        .badge-upcoming { background: rgba(34, 197, 94, 0.15); color: var(--primary-hover); border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-live { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); animation: pulse-red 1.5s infinite; }
 
-        .fund-card {
-            background: var(--card-bg);
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 1.5rem;
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-        }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-        .fund-title {
-            color: #eab308;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
+        .match-versus { display: flex; align-items: center; justify-content: space-between; font-weight: 700; text-align: center; margin: 0.5rem 0; font-size: 0.95rem; }
+        .team-box { flex: 1; word-break: break-word; }
+        .vs-tag { color: var(--danger); font-style: italic; font-size: 0.85rem; padding: 0 8px; }
+        .handicap-tag { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px dashed var(--gold); border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; text-align: center; font-weight: 600; }
+        .match-info { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; border-top: 1px dashed #334155; padding-top: 0.6rem; margin-top: 0.2rem; }
+        .card-actions { display: flex; gap: 8px; justify-content: center; align-items: center; border-top: 1px dashed #334155; padding-top: 8px; margin-top: 4px; }
+        .btn-finish-match { background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+        .btn-finish-match:hover { background: var(--primary-hover); }
 
-        .qr-container {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
 
-        .qr-code {
-            max-width: 240px;
-            border-radius: 8px;
-            border: 2px solid #334155;
-        }
+        .game-title-header { font-size: 1.6rem; color: #fff; font-weight: 700; text-transform: uppercase; border-bottom: 3px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .singles-title { color: var(--primary-hover); }
+        .doubles-title { color: var(--doubles-color); }
 
-        .balance-box {
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            padding: 12px 16px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1.5rem; }
+        .card-title { font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
 
-        .balance-amount {
-            color: #eab308;
-            font-weight: bold;
-            font-size: 1.3rem;
-        }
+        .admin-section { display: none; margin-top: 2rem; border-top: 2px dashed #475569; padding-top: 2rem; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 1024px) { .admin-grid { grid-template-columns: 1fr; } }
+        .admin-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        @media (max-width: 640px) { .admin-card-grid { grid-template-columns: 1fr; } }
 
-        .upcoming-section {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid #334155;
-        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.4rem; color: var(--text-muted); font-size: 0.85rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
+        .form-group select { cursor: pointer; }
 
-        .upcoming-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
+        .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-group { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
 
-        .match-card {
-            background: #0f172a;
-            border-radius: 10px;
-            border: 1px solid #334155;
-            padding: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 0.8rem;
-        }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 0.6rem 0.8rem; background: #0f172a; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #334155; vertical-align: middle; font-size: 0.95rem; }
 
-        .match-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .match-time {
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.88rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex: 1;
-            word-break: break-word;
-        }
-
-        .match-badge {
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .badge-upcoming {
-            background: rgba(34, 197, 94, 0.15);
-            color: var(--primary-hover);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .badge-live {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            animation: pulse-red 1.5s infinite;
-        }
-
-        @keyframes pulse-red {
-            0% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-            }
-        }
-
-        .match-versus {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-weight: 700;
-            text-align: center;
-            margin: 0.5rem 0;
-            font-size: 0.95rem;
-        }
-
-        .team-box {
-            flex: 1;
-            word-break: break-word;
-        }
-
-        .vs-tag {
-            color: var(--danger);
-            font-style: italic;
-            font-size: 0.85rem;
-            padding: 0 8px;
-        }
-
-        .handicap-tag {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--gold);
-            border: 1px dashed var(--gold);
-            border-radius: 6px;
-            padding: 4px 8px;
-            font-size: 0.8rem;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .match-info {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px dashed #334155;
-            padding-top: 0.6rem;
-            margin-top: 0.2rem;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px dashed #334155;
-            padding-top: 8px;
-            margin-top: 4px;
-        }
-
-        .btn-finish-match {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .btn-finish-match:hover {
-            background: var(--primary-hover);
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .game-title-header {
-            font-size: 1.6rem;
-            color: #fff;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-bottom: 3px solid #334155;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .singles-title {
-            color: var(--primary-hover);
-        }
-
-        .doubles-title {
-            color: var(--doubles-color);
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid #334155;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .admin-section {
-            display: none;
-            margin-top: 2rem;
-            border-top: 2px dashed #475569;
-            padding-top: 2rem;
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .admin-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .admin-card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        @media (max-width: 640px) {
-            .admin-card-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.4rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 0.6rem;
-            border-radius: 6px;
-            border: 1px solid #475569;
-            background: #0f172a;
-            color: white;
-            outline: none;
-        }
-
-        .form-group select {
-            cursor: pointer;
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .btn:hover {
-            background: var(--primary-hover);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-        }
-
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th {
-            padding: 0.6rem 0.8rem;
-            background: #0f172a;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 0.6rem 0.8rem;
-            border-bottom: 1px solid #334155;
-            vertical-align: middle;
-            font-size: 0.95rem;
-        }
-
-        .rank-badge {
-            font-weight: bold;
-            width: 25px;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .top-1 {
-            color: var(--gold);
-        }
-
-        .top-2 {
-            color: var(--silver);
-        }
-
-        .top-3 {
-            color: var(--bronze);
-        }
-
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .history-item {
-            font-size: 0.88rem;
-            background: #0f172a;
-            padding: 0.6rem 0.8rem;
-            border-radius: 6px;
-            margin-bottom: 0.5rem;
-            border-left: 3px solid var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .history-content {
-            flex: 1;
-            padding-right: 10px;
-        }
-
-        .btn-delete-history {
-            display: none;
-            background: transparent;
-            color: var(--text-muted);
-            border: none;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .btn-delete-history:hover {
-            color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
-        }
+        .rank-badge { font-weight: bold; width: 25px; text-align: center; display: inline-block; }
+        .top-1 { color: var(--gold); } .top-2 { color: var(--silver); } .top-3 { color: var(--bronze); }
+        
+        .history-list { max-height: 300px; overflow-y: auto; padding-right: 5px; }
+        .history-item { font-size: 0.88rem; background: #0f172a; padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; border-left: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .history-content { flex: 1; padding-right: 10px; }
+        .btn-delete-history { display: none; background: transparent; color: var(--text-muted); border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
+        .btn-delete-history:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -709,7 +162,6 @@
         <i class="fa-solid fa-key"></i>
     </button>
 
-    <!-- HERO BANNER -->
     <div class="hero-banner">
         <div class="hero-slides">
             <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1600&auto=format&fit=crop');"></div>
@@ -718,18 +170,12 @@
         </div>
         <div class="hero-overlay">
             <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fa-solid fa-fire"></i> Giải Đấu Thường Niên
-                </div>
+                <div class="hero-badge"><i class="fa-solid fa-fire"></i> Giải Đấu Thường Niên</div>
                 <h2 class="hero-title">Đỉnh Cao Đam Mê <span>Pickleball Hoàng Gia</span></h2>
                 <p class="hero-desc">Hệ thống tính điểm Elo chuẩn quốc tế, cập nhật bảng xếp hạng Đơn/Đôi và nhật ký thi đấu liên tục theo thời gian thực.</p>
                 <div class="hero-actions">
-                    <button class="btn-hero btn-hero-primary" onclick="document.querySelector('.upcoming-section').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-calendar-check"></i> Xem Trận Sắp Đấu
-                    </button>
-                    <button class="btn-hero btn-hero-secondary" onclick="document.querySelector('.main-grid').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-ranking-star"></i> Bảng Xếp Hạng Elo
-                    </button>
+                    <button class="btn-hero btn-hero-primary" onclick="document.querySelector('.upcoming-section').scrollIntoView({behavior: 'smooth'});"><i class="fa-solid fa-calendar-check"></i> Xem Trận Sắp Đấu</button>
+                    <button class="btn-hero btn-hero-secondary" onclick="document.querySelector('.main-grid').scrollIntoView({behavior: 'smooth'});"><i class="fa-solid fa-ranking-star"></i> Bảng Xếp Hạng Elo</button>
                 </div>
             </div>
         </div>
@@ -748,9 +194,7 @@
     <div class="main-layout">
         <div class="fund-card">
             <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick</div>
-            <div class="qr-container">
-                <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
-            </div>
+            <div class="qr-container"><img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code"></div>
             <div class="balance-box">
                 <span>Số dư quỹ hiện tại</span>
                 <span class="balance-amount" id="fundBalance">Đang tải...</span>
@@ -771,14 +215,7 @@
                     <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Vận Động Viên</div>
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th style="width: 50px;">Hạng</th>
-                                    <th>VĐV</th>
-                                    <th>T-B</th>
-                                    <th style="text-align: right;">Elo</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th style="width: 50px;">Hạng</th><th>VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
                             <tbody id="singlesBody"></tbody>
                         </table>
                     </div>
@@ -795,14 +232,7 @@
                     <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Đôi Nam/Nữ/Nam Nữ</div>
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th style="width: 50px;">Hạng</th>
-                                    <th>Cặp VĐV</th>
-                                    <th>T-B</th>
-                                    <th style="text-align: right;">Elo</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th style="width: 50px;">Hạng</th><th>Cặp VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
                             <tbody id="doublesBody"></tbody>
                         </table>
                     </div>
@@ -815,16 +245,13 @@
         </div>
     </div>
 
-    <!-- Admin Panel -->
     <div class="admin-section" id="adminSectionArea">
         <h2 style="font-size: 1.4rem; color: var(--accent); margin-bottom: 1.5rem; text-align: center;">
             <i class="fa-solid fa-sliders"></i> BẢNG ĐIỀU KHIỂN QUẢN TRỊ VIÊN
         </h2>
         
         <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
-            <div class="card-title" style="color: var(--accent);">
-                <i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra
-            </div>
+            <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra</div>
             <div class="admin-card-grid">
                 <div>
                     <div class="form-group">
@@ -834,147 +261,68 @@
                             <option value="doubles">Đánh Đôi (2v2)</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Chọn VĐV / Cặp Đôi 1</label>
-                        <select id="upcomingTeam1"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Chọn VĐV / Cặp Đôi 2</label>
-                        <select id="upcomingTeam2"></select>
-                    </div>
+                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 1</label><select id="upcomingTeam1"></select></div>
+                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 2</label><select id="upcomingTeam2"></select></div>
                 </div>
                 <div>
-                    <div class="form-group">
-                        <label>Mục chấp điểm / Kèo chấp</label>
-                        <input type="text" id="upcomingHandicap" placeholder="Ví dụ: Đội 1 chấp 2 điểm / Đồng banh...">
-                    </div>
-                    <div class="form-group">
-                        <label>Thời gian thi đấu</label>
-                        <input type="datetime-local" id="upcomingTime">
-                    </div>
-                    <div class="form-group">
-                        <label>Sân thi đấu</label>
-                        <input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02">
-                    </div>
-                    <div class="form-group">
-                        <label>Hạng mục / Ghi chú</label>
-                        <input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B...">
-                    </div>
-                    <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addUpcomingMatch()">
-                        <i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu
-                    </button>
+                    <div class="form-group"><label>Mục chấp điểm / Kèo chấp</label><input type="text" id="upcomingHandicap" placeholder="Ví dụ: Đội 1 chấp 2 điểm / Đồng banh..."></div>
+                    <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
+                    <div class="form-group"><label>Sân thi đấu</label><input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02"></div>
+                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B..."></div>
+                    <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addUpcomingMatch()"><i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu</button>
                 </div>
             </div>
         </div>
 
         <div class="admin-grid">
             <div class="card" style="border-color: rgba(34, 197, 94, 0.4);">
-                <div class="card-title singles-title">
-                    <i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐƠN (1v1)
-                </div>
+                <div class="card-title singles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐƠN (1v1)</div>
                 <div class="admin-card-grid">
                     <div>
-                        <div class="form-group">
-                            <label>Tên VĐV Mới</label>
-                            <input type="text" id="singlesAddName" placeholder="Nhập tên VĐV...">
-                        </div>
-                        <div class="form-group">
-                            <label>Điểm Elo khởi đầu</label>
-                            <input type="number" id="singlesAddPoints" value="1200">
-                        </div>
-                        <button class="btn" onclick="addNewEntry('singles')">
-                            <i class="fa-solid fa-user-plus"></i> Thêm VĐV
-                        </button>
+                        <div class="form-group"><label>Tên VĐV Mới</label><input type="text" id="singlesAddName" placeholder="Nhập tên VĐV..."></div>
+                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="singlesAddPoints" value="1200"></div>
+                        <button class="btn" onclick="addNewEntry('singles')"><i class="fa-solid fa-user-plus"></i> Thêm VĐV</button>
                     </div>
                     <div>
-                        <div class="form-group">
-                            <label>VĐV Thắng</label>
-                            <select id="singlesMatchWinner"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>VĐV Thua</label>
-                            <select id="singlesMatchLoser"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Ghi chú / Tỉ số</label>
-                            <input type="text" id="singlesMatchNote" placeholder="Ví dụ: 2-0">
-                        </div>
-                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('singles')">
-                            <i class="fa-solid fa-check"></i> Lưu kết quả
-                        </button>
+                        <div class="form-group"><label>VĐV Thắng</label><select id="singlesMatchWinner"></select></div>
+                        <div class="form-group"><label>VĐV Thua</label><select id="singlesMatchLoser"></select></div>
+                        <div class="form-group"><label>Ghi chú / Tỉ số</label><input type="text" id="singlesMatchNote" placeholder="Ví dụ: 2-0"></div>
+                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('singles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
                     </div>
                 </div>
                 <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group">
-                        <label>Sửa/Xóa VĐV Đơn</label>
-                        <select id="singlesManageTarget"></select>
-                    </div>
+                    <div class="form-group"><label>Sửa/Xóa VĐV Đơn</label><select id="singlesManageTarget"></select></div>
                     <div class="btn-group">
-                        <button class="btn btn-danger" onclick="deleteEntry('singles')">
-                            <i class="fa-solid fa-trash"></i> Xóa
-                        </button>
-                        <button class="btn" style="background:#4b5563;" onclick="editPoints('singles')">
-                            <i class="fa-solid fa-pen-to-square"></i> Sửa Elo
-                        </button>
+                        <button class="btn btn-danger" onclick="deleteEntry('singles')"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn" style="background:#4b5563;" onclick="editPoints('singles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
                     </div>
                 </div>
             </div>
 
             <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
-                <div class="card-title doubles-title">
-                    <i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)
-                </div>
+                <div class="card-title doubles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)</div>
                 <div class="admin-card-grid">
                     <div>
                         <label style="color: var(--doubles-color); font-weight: bold; display: block; margin-bottom: 6px;">THÊM CẶP ĐÔI MỚI (CHỌN 2 VĐV)</label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div class="form-group">
-                                <label>VĐV A</label>
-                                <select id="doublesNewPlayer1"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>VĐV B</label>
-                                <select id="doublesNewPlayer2"></select>
-                            </div>
+                            <div class="form-group"><label>VĐV A</label><select id="doublesNewPlayer1"></select></div>
+                            <div class="form-group"><label>VĐV B</label><select id="doublesNewPlayer2"></select></div>
                         </div>
-                        <div class="form-group">
-                            <label>Điểm Elo khởi đầu</label>
-                            <input type="number" id="doublesAddPoints" value="1200">
-                        </div>
-                        <button class="btn" style="background:var(--doubles-color);" onclick="addNewPairFromSelection()">
-                            <i class="fa-solid fa-users-plus"></i> Tạo Cặp Đôi Mới
-                        </button>
+                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="doublesAddPoints" value="1200"></div>
+                        <button class="btn" style="background:var(--doubles-color);" onclick="addNewPairFromSelection()"><i class="fa-solid fa-users-plus"></i> Tạo Cặp Đôi Mới</button>
                     </div>
                     <div>
-                        <div class="form-group">
-                            <label style="color: var(--primary-hover); font-weight: bold;">ĐỘI THẮNG</label>
-                            <select id="doublesWinner"></select>
-                        </div>
-                        <div class="form-group">
-                            <label style="color: var(--danger); font-weight: bold;">ĐỘI THUA</label>
-                            <select id="doublesLoser"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Ghi chú / Tỉ số</label>
-                            <input type="text" id="doublesMatchNote" placeholder="Ví dụ: 2-1">
-                        </div>
-                        <button class="btn" style="background:#2563eb; margin-top: 0.8rem;" onclick="recordDoublesMatch()">
-                            <i class="fa-solid fa-check"></i> Lưu kết quả Đôi
-                        </button>
+                        <div class="form-group"><label style="color: var(--primary-hover); font-weight: bold;">ĐỘI THẮNG</label><select id="doublesWinner"></select></div>
+                        <div class="form-group"><label style="color: var(--danger); font-weight: bold;">ĐỘI THUA</label><select id="doublesLoser"></select></div>
+                        <div class="form-group"><label>Ghi chú / Tỉ số</label><input type="text" id="doublesMatchNote" placeholder="Ví dụ: 2-1"></div>
+                        <button class="btn" style="background:#2563eb; margin-top: 0.8rem;" onclick="recordDoublesMatch()"><i class="fa-solid fa-check"></i> Lưu kết quả Đôi</button>
                     </div>
                 </div>
                 <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group">
-                        <label>Sửa/Xóa Cặp Đôi</label>
-                        <select id="doublesManageTarget"></select>
-                    </div>
+                    <div class="form-group"><label>Sửa/Xóa Cặp Đôi</label><select id="doublesManageTarget"></select></div>
                     <div class="btn-group">
-                        <button class="btn btn-danger" onclick="deleteEntry('doubles')">
-                            <i class="fa-solid fa-trash"></i> Xóa
-                        </button>
-                        <button class="btn" style="background:#4b5563;" onclick="editPoints('doubles')">
-                            <i class="fa-solid fa-pen-to-square"></i> Sửa Elo
-                        </button>
+                        <button class="btn btn-danger" onclick="deleteEntry('doubles')"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn" style="background:#4b5563;" onclick="editPoints('doubles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
                     </div>
                 </div>
             </div>
@@ -1002,10 +350,8 @@
         let nextIndex = (currentHeroSlide + 1) % totalHeroSlides;
         setHeroSlide(nextIndex);
     }
-
     setInterval(nextHeroSlide, 5000);
 
-    // --- CHUẨN HÓA MẢNG RỖNG CHỐNG TRÙNG LẶP DỮ LIỆU CŨ ---
     function ensureArray(val) {
         if (!val) return [];
         if (Array.isArray(val)) return val.filter(item => item !== null && item !== undefined);
@@ -1013,7 +359,6 @@
         return [];
     }
 
-    // --- LẤY DỮ LIỆU TỪ GOOGLE SHEET MỚI (TỒN QUỸ M7) ---
     function fetchSheetBalance() {
         const sheetID = "1D1J5pPQoHXru3HcH1tpDXMdBcO29h6oHzQiwVA4zdiA";
         const gid = "1274338359";
@@ -1045,7 +390,7 @@
                 document.getElementById('fundBalance').innerText = "0đ";
             })
             .catch(err => {
-                console.error("Lỗi khi tải dữ liệu từ Google Sheet:", err);
+                console.error("Lỗi Google Sheet:", err);
                 document.getElementById('fundBalance').innerText = "0đ";
             });
     }
@@ -1053,7 +398,6 @@
     fetchSheetBalance();
     setInterval(fetchSheetBalance, 30000);
 
-    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
         authDomain: "pickleball-hoanggia.firebaseapp.com",
@@ -1072,8 +416,9 @@
     const ADMIN_PASSWORD = "123456";
     let isAdminActive = false;
 
-    // DỮ LIỆU BAN ĐẦU RỖNG - KHÔNG CHỨA TÊN VĐV CỐ ĐỊNH
-    let db = {
+    // LẤY DỮ LIỆU TỪ BỘ NHỚ TRÌNH DUYỆT (LOCALSTORAGE) LÀM ƯU TIÊN HÀNG ĐẦU
+    let localSaved = localStorage.getItem('pickleball_local_db');
+    let db = localSaved ? JSON.parse(localSaved) : {
         singles: [],
         singlesHistory: [],
         doubles: [],
@@ -1081,9 +426,10 @@
         upcomingMatches: []
     };
 
+    // ĐỒNG BỘ TỪ FIREBASE KHI CÓ KẾT NỐI
     dbRef.on('value', (snapshot) => {
         const data = snapshot.val();
-        if (data) {
+        if (data && Object.keys(data).length > 0) {
             db = {
                 singles: ensureArray(data.singles),
                 singlesHistory: ensureArray(data.singlesHistory),
@@ -1091,19 +437,11 @@
                 doublesHistory: ensureArray(data.doublesHistory),
                 upcomingMatches: ensureArray(data.upcomingMatches)
             };
-        } else {
-            db = {
-                singles: [],
-                singlesHistory: [],
-                doubles: [],
-                doublesHistory: [],
-                upcomingMatches: []
-            };
+            localStorage.setItem('pickleball_local_db', JSON.stringify(db));
+            initApp();
         }
-        initApp();
     }, (err) => {
-        console.error("Lỗi kết nối Firebase:", err);
-        alert("LỖI KẾT NỐI FIREBASE: " + err.message + "\nHãy kiểm tra lại phần Rules trên Firebase Console!");
+        console.warn("Chưa đồng bộ được Firebase, đang dùng bộ nhớ máy:", err);
     });
 
     function toggleAdminMode() {
@@ -1127,6 +465,7 @@
         }
     }
 
+    // HÀM LƯU DỮ LIỆU KÉP (LOCALSTORAGE + FIREBASE)
     function saveData() {
         db.singles = ensureArray(db.singles);
         db.singlesHistory = ensureArray(db.singlesHistory);
@@ -1134,13 +473,16 @@
         db.doublesHistory = ensureArray(db.doublesHistory);
         db.upcomingMatches = ensureArray(db.upcomingMatches);
 
+        // 1. Luôn lưu vào LocalStorage ngay lập tức
+        localStorage.setItem('pickleball_local_db', JSON.stringify(db));
         initApp();
 
+        // 2. Thử lưu lên Firebase
         dbRef.set(db).then(() => {
-            console.log("Đã lưu dữ liệu lên Firebase thành công!");
+            console.log("Đã đồng bộ lên Firebase thành công!");
         }).catch(err => {
-            console.error("Lỗi khi lưu lên Firebase:", err);
-            alert("KHÔNG LƯU ĐƯỢC LÊN FIREBASE!\nLỗi: " + err.message + "\n\n-> Vui lòng mở Firebase Console -> Realtime Database -> Rules và sửa thành:\n{\n  \"rules\": {\n    \".read\": true,\n    \".write\": true\n  }\n}");
+            console.error("Firebase bị từ chối lưu:", err);
+            alert("CẢNH BÁO: Dữ liệu đã lưu tạm thời vào máy của bạn, nhưng chưa đẩy lên Cloud được!\n\nLý do: Chế độ bảo mật Firebase đang đóng cửa ghi.\nVui lòng mở Firebase Rules thành .write: true");
         });
     }
 
@@ -1193,12 +535,8 @@
 
             const adminActionBtns = isAdminActive ? `
                 <div class="card-actions">
-                    <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})">
-                        <i class="fa-solid fa-check"></i> Hoàn thành
-                    </button>
-                    <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteUpcomingMatch(${idx})">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+                    <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})"><i class="fa-solid fa-check"></i> Hoàn thành</button>
+                    <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteUpcomingMatch(${idx})"><i class="fa-solid fa-trash"></i></button>
                 </div>
             ` : '';
 
@@ -1227,23 +565,15 @@
 
     function addUpcomingMatch() {
         const type = document.getElementById('upcomingType').value;
-        const team1Select = document.getElementById('upcomingTeam1');
-        const team2Select = document.getElementById('upcomingTeam2');
-        const team1 = team1Select.value;
-        const team2 = team2Select.value;
+        const team1 = document.getElementById('upcomingTeam1').value;
+        const team2 = document.getElementById('upcomingTeam2').value;
         const handicap = document.getElementById('upcomingHandicap').value.trim();
         const time = document.getElementById('upcomingTime').value;
         const court = document.getElementById('upcomingCourt').value.trim();
         const category = document.getElementById('upcomingCategory').value.trim();
 
-        if (!team1 || !team2) {
-            alert("Vui lòng chọn 2 đội/VĐV!");
-            return;
-        }
-        if (team1 === team2) {
-            alert("VĐV / Cặp đôi không thể tự đấu với chính mình!");
-            return;
-        }
+        if (!team1 || !team2) { alert("Vui lòng chọn 2 đội/VĐV!"); return; }
+        if (team1 === team2) { alert("VĐV / Cặp đôi không thể tự đấu với chính mình!"); return; }
 
         db.upcomingMatches = ensureArray(db.upcomingMatches);
         db.upcomingMatches.push({ type, team1, team2, handicap, time, court, category });
@@ -1350,8 +680,7 @@
 
     function calculateElo(ratingA, ratingB, actualA, K = 32) {
         const expectedA = 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
-        const changeA = Math.round(K * (actualA - expectedA));
-        return changeA;
+        return Math.round(K * (actualA - expectedA));
     }
 
     function recordMatch(type) {
@@ -1359,14 +688,8 @@
         const loserName = document.getElementById(type + 'MatchLoser').value;
         const noteText = document.getElementById(type + 'MatchNote').value.trim();
 
-        if (!winnerName || !loserName) {
-            alert("Vui lòng chọn đầy đủ VĐV Thắng và Thua!");
-            return;
-        }
-        if (winnerName === loserName) {
-            alert("VĐV thắng và thua không thể là cùng 1 người!");
-            return;
-        }
+        if (!winnerName || !loserName) { alert("Vui lòng chọn đầy đủ VĐV Thắng và Thua!"); return; }
+        if (winnerName === loserName) { alert("VĐV thắng và thua không thể là cùng 1 người!"); return; }
 
         db[type] = ensureArray(db[type]);
         const winnerObj = db[type].find(i => i.name === winnerName);
@@ -1375,19 +698,13 @@
         if (!winnerObj || !loserObj) return;
 
         const eloChange = calculateElo(winnerObj.points, loserObj.points, 1);
-
         winnerObj.points += eloChange;
         winnerObj.win = (winnerObj.win || 0) + 1;
-
         loserObj.points -= eloChange;
         loserObj.loss = (loserObj.loss || 0) + 1;
 
         db[type + 'History'] = ensureArray(db[type + 'History']);
-        db[type + 'History'].push({
-            winner: winnerName,
-            loser: loserName,
-            note: `${noteText ? noteText + ' ' : ''}(+${eloChange}/-${eloChange} Elo)`
-        });
+        db[type + 'History'].push({ winner: winnerName, loser: loserName, note: `${noteText ? noteText + ' ' : ''}(+${eloChange}/-${eloChange} Elo)` });
 
         saveData();
         document.getElementById(type + 'MatchNote').value = '';
@@ -1399,14 +716,8 @@
         const loserName = document.getElementById('doublesLoser').value;
         const noteText = document.getElementById('doublesMatchNote').value.trim();
 
-        if (!winnerName || !loserName) {
-            alert("Vui lòng chọn đầy đủ Đội Thắng và Đội Thua!");
-            return;
-        }
-        if (winnerName === loserName) {
-            alert("Đội thắng và thua không thể trùng nhau!");
-            return;
-        }
+        if (!winnerName || !loserName) { alert("Vui lòng chọn đầy đủ Đội Thắng và Đội Thua!"); return; }
+        if (winnerName === loserName) { alert("Đội thắng và thua không thể trùng nhau!"); return; }
 
         db.doubles = ensureArray(db.doubles);
         const winnerObj = db.doubles.find(i => i.name === winnerName);
@@ -1415,19 +726,13 @@
         if (!winnerObj || !loserObj) return;
 
         const eloChange = calculateElo(winnerObj.points, loserObj.points, 1);
-
         winnerObj.points += eloChange;
         winnerObj.win = (winnerObj.win || 0) + 1;
-
         loserObj.points -= eloChange;
         loserObj.loss = (loserObj.loss || 0) + 1;
 
         db.doublesHistory = ensureArray(db.doublesHistory);
-        db.doublesHistory.push({
-            winner: winnerName,
-            loser: loserName,
-            note: `${noteText ? noteText + ' ' : ''}(+${eloChange}/-${eloChange} Elo)`
-        });
+        db.doublesHistory.push({ winner: winnerName, loser: loserName, note: `${noteText ? noteText + ' ' : ''}(+${eloChange}/-${eloChange} Elo)` });
 
         saveData();
         document.getElementById('doublesMatchNote').value = '';
@@ -1440,15 +745,11 @@
         const name = nameInput.value.trim();
         const points = parseInt(pointsInput.value) || 1200;
 
-        if (!name) {
-            alert("Vui lòng nhập tên VĐV!");
-            return;
-        }
+        if (!name) { alert("Vui lòng nhập tên VĐV!"); return; }
 
         db[type] = ensureArray(db[type]);
         if (db[type].some(i => i.name.toLowerCase() === name.toLowerCase())) {
-            alert("Tên VĐV này đã tồn tại trong danh sách!");
-            return;
+            alert("Tên VĐV này đã tồn tại trong danh sách!"); return;
         }
 
         db[type].push({ name: name, points: points, win: 0, loss: 0 });
@@ -1462,22 +763,15 @@
         const p2 = document.getElementById('doublesNewPlayer2').value;
         const points = parseInt(document.getElementById('doublesAddPoints').value) || 1200;
 
-        if (!p1 || !p2) {
-            alert("Vui lòng chọn đủ 2 VĐV!");
-            return;
-        }
-        if (p1 === p2) {
-            alert("Cặp đôi phải gồm 2 VĐV khác nhau!");
-            return;
-        }
+        if (!p1 || !p2) { alert("Vui lòng chọn đủ 2 VĐV!"); return; }
+        if (p1 === p2) { alert("Cặp đôi phải gồm 2 VĐV khác nhau!"); return; }
 
         const pairName = `${p1} & ${p2}`;
         const altPairName = `${p2} & ${p1}`;
 
         db.doubles = ensureArray(db.doubles);
         if (db.doubles.some(i => i.name === pairName || i.name === altPairName)) {
-            alert("Cặp đôi này đã tồn tại!");
-            return;
+            alert("Cặp đôi này đã tồn tại!"); return;
         }
 
         db.doubles.push({ name: pairName, points: points, win: 0, loss: 0 });
@@ -1489,10 +783,7 @@
         db[type] = ensureArray(db[type]);
         const selectId = type === 'singles' ? 'singlesManageTarget' : 'doublesManageTarget';
         const select = document.getElementById(selectId);
-        if (!select || select.value === "") {
-            alert("Vui lòng chọn VĐV/Cặp đôi cần xóa!");
-            return;
-        }
+        if (!select || select.value === "") { alert("Vui lòng chọn VĐV/Cặp đôi cần xóa!"); return; }
 
         const idx = parseInt(select.value);
         if (isNaN(idx) || idx < 0 || idx >= db[type].length) return;
@@ -1509,10 +800,7 @@
         db[type] = ensureArray(db[type]);
         const selectId = type === 'singles' ? 'singlesManageTarget' : 'doublesManageTarget';
         const select = document.getElementById(selectId);
-        if (!select || select.value === "") {
-            alert("Vui lòng chọn đối tượng cần sửa!");
-            return;
-        }
+        if (!select || select.value === "") { alert("Vui lòng chọn đối tượng cần sửa!"); return; }
 
         const idx = parseInt(select.value);
         if (isNaN(idx) || idx < 0 || idx >= db[type].length) return;
